@@ -31,13 +31,13 @@ class Dual:
         dual=(self.dual*x.real-self.real*x.dual)/(x.real**2)
         return Dual(real,dual)
 
-    def __itruediv__(self,x):
-        if (x.real==0):
+    def __itruediv__(self, x):
+        if (x.real == 0):
             logging.warning("Division of dual numbers is not defined when the real part of the denominator is zero")
             return np.nan
-        self.real/=x.real
-        dual=(self.dual*x.real-self.real*x.dual)/(x.real**2)
-        self.dual=dual
+        self.real = self.real / x.real
+        dual = (self.dual * x.real - self.real * x.dual) / (x.real ** 2)
+        self.dual = dual
         return self
 
     def __sub__(self,x):
@@ -79,8 +79,12 @@ class Dual:
     def __eq__(self,x):
         return ((self.real==x.real) and (self.dual==x.dual))
 
+    def __ne__(self,x):
+        return ((self.real!=x.real) or (self.dual!=x.dual))
+
     def __abs__(self):
         return Dual(np.abs(self.real),np.abs(self.dual))
+
     #Defining other essential functions (details in the project report)
     def sin(self):
         dual=self.dual*np.cos(self.real)
@@ -91,7 +95,7 @@ class Dual:
         return  Dual(np.cos(self.real),dual)
 
     def tan(self):
-        if (np.cos(self.real)==0):
+        if (np.isclose(np.cos(self.real), 0)):
             logging.warning("Tan can't be defined for this function")
             return np.nan
         dual=self.dual/(np.cos(self.real)**2)
