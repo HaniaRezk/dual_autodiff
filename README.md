@@ -4,11 +4,11 @@ A Python package that performs automatic differentiation using dual numbers.
 
 ## Features
 
-*Main file of the project "dual.py" with core functions and attributes:
-    *Basic arithmetic operations for dual numbers
-    *Other essential functions for automatic differentiation (sin,cos,exp,..)
+* Main file of the project "dual.py" with core functions and attributes:
+    * Basic arithmetic operations for dual numbers
+    * Other essential functions for automatic differentiation (sin,cos,exp,..)
 
-*A comprehensive test suite that civer a meaningful range of cases. You can execute these tests with pytest by running the command:
+* A comprehensive test suite that civer a meaningful range of cases. You can execute these tests with pytest by running the command:
 
 ```bash
 pytest -s tests/*
