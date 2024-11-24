@@ -26,7 +26,7 @@ pip install -e .
 ## Usage
 Below is a quick example of how to use the package:
 
-```
+```python
 import dual_autodiff as df
 
 #Creating two instances of dual numbers
