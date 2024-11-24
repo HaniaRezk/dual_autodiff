@@ -1,0 +1,17 @@
+
+[project]
+name="dual_autodiff"
+dynamic=["version"]
+description="A python package that performs automatic differentiation using dual numbers"
+readme="README.md"
+requires-python=">=3.9"
+authors=[{name="Hania Rezk", email="hhmmer2@cam.ac.uk"}]
+keywords=["dual numbers", "automatic differentiation"]
+dependencies=["numpy"]
+
+[project.urls]
+"Documentation" = "https://your-readthedocs-url-here"
+
+
+[tools.setuptools_scm]
+write_to="dual_autodiff/version.py"
