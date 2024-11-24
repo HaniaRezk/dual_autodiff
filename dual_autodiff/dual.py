@@ -1,8 +1,7 @@
 import numpy as np
-import logging
+#import logging
 
-
-logging.basicConfig(level=logging.INFO, format='%(levelname)s: %(message)s')
+#logging.basicConfig(level=logging.INFO, format='%(levelname)s: %(message)s')
 
 class Dual:
     def __init__(self,real,dual):
@@ -24,7 +23,7 @@ class Dual:
 
     def __div__(self,x):
         if (x.real==0):
-            logging.warning("Division of dual numbers is not defined when the real part of the denominator is zero")
+            #logging.warning("Division of dual numbers is not defined when the real part of the denominator is zero")
             return np.nan
         real=self.real/x.real
         dual=(self.dual*x.real-self.real*x.dual)/(x.real**2)
@@ -32,7 +31,7 @@ class Dual:
 
     def __idiv__(self,x):
         if (x.real==0):
-            logging.warning("Division of dual numbers is not defined when the real part of the denominator is zero")
+            #logging.warning("Division of dual numbers is not defined when the real part of the denominator is zero")
             return np.nan
         self.real/=x.real
         dual=(self.dual*x.real-self.real*x.dual)/(x.real**2)
@@ -69,14 +68,14 @@ class Dual:
 
     def tan(self):
         if (np.cos(self.real)==0):
-            logging.warning("Tan can't be defined for this function")
+            #logging.warning("Tan can't be defined for this function")
             return np.nan
         dual=self.dual/(np.cos(self.real)**2)
         return  Dual(np.tan(self.real),dual)
 
     def log(self):
         if (self.real==0):
-            logging.warning("Logarithm of dual number not defined when real part is zero")
+            #logging.warning("Logarithm of dual number not defined when real part is zero")
             return np.nan
         dual=(1/self.real)*self.dual
         return  Dual(np.log(self.real),dual)
