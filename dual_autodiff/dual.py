@@ -16,71 +16,140 @@ class Dual:
 
     #Redefining the basic arithmetic operations
     def __add__(self,x):
-        return Dual(x.real+self.real,x.dual+self.dual)
+        if isinstance(x, Dual):
+            return Dual(x.real+self.real,x.dual+self.dual)
+        else:
+            return Dual(x + self.real,self.dual)
     
     def __iadd__(self,x):
-        self.real+=x.real
-        self.dual+=x.dual
-        return self
+        if isinstance(x, Dual):
+            self.real+=x.real
+            self.dual+=x.dual
+            return self
+        else: 
+            self.real+=x
+            return self
 
     def __truediv__(self,x):
-        if (x.real==0):
-            logging.warning("Division of dual numbers is not defined when the real part of the denominator is zero")
-            return np.nan
-        real=self.real/x.real
-        dual=(self.dual*x.real-self.real*x.dual)/(x.real**2)
-        return Dual(real,dual)
+        if isinstance(x, Dual):
+            if (x.real==0):
+                logging.warning("Division of dual numbers is not defined when the real part of the denominator is zero")
+                return np.nan
+            real=self.real/x.real
+            dual=(self.dual*x.real-self.real*x.dual)/(x.real**2)
+            return Dual(real,dual)
+        else:
+            if (x==0):
+                logging.warning("Division of dual numbers is not defined when the the denominator is zero")
+                return np.nan
+            real=self.real/x
+            dual=self.dual/x
+            return Dual(real,dual)
+            
+
 
     def __itruediv__(self, x):
-        if (x.real == 0):
-            logging.warning("Division of dual numbers is not defined when the real part of the denominator is zero")
-            return np.nan
-        self.real = self.real / x.real
-        dual = (self.dual * x.real - self.real * x.dual) / (x.real ** 2)
-        self.dual = dual
-        return self
+        if isinstance(x, Dual):
+            if (x.real == 0):
+                logging.warning("Division of dual numbers is not defined when the real part of the denominator is zero")
+                return np.nan
+            real = self.real / x.real
+            dual = (self.dual*x.real-self.real*x.dual)/(x.real**2)
+            self.real=real
+            self.dual=dual
+            return self
+        else:
+            self.real/=x
+            self.dual/=x
+            return self
+
 
     def __sub__(self,x):
-        return Dual(self.real-x.real,self.dual-x.dual)
+        if isinstance(x, Dual):
+            return Dual(self.real-x.real,self.dual-x.dual)
+        else:
+            return Dual(self.real-x,self.dual)
 
     def __isub__(self,x):
-        self.real-=x.real
-        self.dual-=x.dual
-        return self
+        if isinstance(x, Dual):
+            self.real-=x.real
+            self.dual-=x.dual
+            return self
+        else: 
+            self.real-=x
+            return self
 
     def __mul__(self,x):
-        real=self.real*x.real
-        dual=self.real*x.dual+self.dual*x.real
-        return Dual(real,dual)
+        if isinstance(x, Dual):
+            real=self.real*x.real
+            dual=self.real*x.dual+self.dual*x.real
+            return Dual(real,dual)
+        else:
+            return Dual(self.real*x,self.dual*x)
         
     def __imul__(self,x):
-        real=self.real*x.real
-        dual=self.real*x.dual+self.dual*x.real
-        self.real=real
-        self.dual=dual
-        return self
+        if isinstance(x, Dual):
+            real=self.real*x.real
+            dual=self.real*x.dual+self.dual*x.real
+            self.real=real
+            self.dual=dual
+            return self
+        else:
+            self.real*=x
+            self.dual*=x
+            return self
+
     
     def __pow__(self,power):
-        real=self.real**power
-        dual=(power*self.real**(power-1))*self.dual
-        return Dual(real,dual)
+        if isinstance(power, Dual):
+            if(power.dual!=0):
+                logging.warning("The power cant be a dual number")
+                return np.nan
+            else:
+                real=self.real**power.real
+                dual=(power.real*self.real**(power.real-1))*self.dual
+                return Dual(real,dual)
+
+        else:        
+            real=self.real**power
+            dual=(power*self.real**(power-1))*self.dual
+            return Dual(real,dual)
     
     def __ipow__(self,power):
-        real=self.real**power
-        dual=(power*self.real**(power-1))*self.dual
-        self.real=real
-        self.dual=dual
-        return self
+        if isinstance(power, Dual):
+            if (power.dual!=0):
+                logging.warning("The power cant be a dual number")
+                return np.nan
+            else:
+                real=self.real**power.real
+                dual=(power.real*self.real**(power.real-1))*self.dual
+                self.real=real
+                self.dual=dual
+                return self
+
+        else:        
+            real=self.real**power
+            dual=(power*self.real**(power-1))*self.dual
+            self.real=real
+            self.dual=dual
+            return self
 
 
     def __neg__(self):
         return Dual(-self.real,-self.dual)
 
     def __eq__(self,x):
-        return ((self.real==x.real) and (self.dual==x.dual))
+        if isinstance(x, Dual):
+            return ((self.real==x.real) and (self.dual==x.dual))
+        else:
+            return((self.real==x) and (self.dual==0))
 
     def __ne__(self,x):
-        return ((self.real!=x.real) or (self.dual!=x.dual))
+        if isinstance(x, Dual):
+            return ((self.real!=x.real) or (self.dual!=x.dual))
+        else:
+            return((self.real!=x) or (self.dual!=0))
+        
 
     def __abs__(self):
         return Dual(np.abs(self.real),np.abs(self.dual))
