@@ -14,6 +14,12 @@ This section provides an overview of our package structure, to clarify the names
     │   ├── dual.py                  # Dual class
     ├── dist/                        # Distribution files
     ├── docs/                        # Documentation files
-    └── tests/                       # Test files
-    └── Question5                    # Code for question 5 of the coursework
+    │   ├── Makefile                 # Commands to build the documentation
+    │   ├── requirements.txt              
+    │   ├── conf.py                  # Configuration of the documentation
+    │   ├── index.rst                # The main page of the documentation
+    │   ├── material/                # Notbeooks for different parts of the documentation
+    └── tests/                       # Test folder
+    │   ├── autodiff_tools.py        # Test suite for Dual class
+    └── Question5.py                 # Code for question 5 of the coursework
 

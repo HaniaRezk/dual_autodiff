@@ -41,12 +41,26 @@ class Dual:
             x: the dual number or scalar to add to our current instance.
 
         Returns:
-            dual number: the result of the addition of the current instance and the input (dual number or scalar)
+            Dual number: the result of the addition of the current instance and the input (dual number or scalar)
         """
         if isinstance(x, Dual):
             return Dual(x.real+self.real,x.dual+self.dual)
         else:
             return Dual(x + self.real,self.dual)
+
+    def __radd__(self, x):
+
+        """
+        Redefines the reverse ``+`` operator to adapt it to dual numbers.
+        Considers the case where we have :scalar+dual number
+
+        Parameters:
+            x: the scalar to add to our current instance.
+
+        Returns:
+            Dual number: the result of the addition of the scalar and the current instance.
+        """
+        return self + x
     
     def __iadd__(self,x):
         """
@@ -56,7 +70,7 @@ class Dual:
             x: the dual number or scalar to add to our current instance.
 
         Returns:
-            dual number: the result of the addition of the current instance and the input (dual number or scalar)
+            Dual number: the result of the addition of the current instance and the input (dual number or scalar)
         """
         if isinstance(x, Dual):
             self.real+=x.real
@@ -74,7 +88,7 @@ class Dual:
             x: the dual number or scalar to divide our current instance with.
 
         Returns:
-            dual number: the result of  dividing the current instance by the input (dual number or scalar).
+            Dual number: the result of dividing the current instance by the input (dual number or scalar).
         
         Raises:
             Warning: If division by zero is attempted.
@@ -93,8 +107,25 @@ class Dual:
             real=self.real/x
             dual=self.dual/x
             return Dual(real,dual)
-            
 
+    def __rtruediv__(self, x):
+        """
+        Redefines the reverse ``/`` operator to adapt it to dual numbers.
+        Considers the case where we have: scalar/dual number
+
+        Parameters:
+            x: the scalar that is the numerator of the division.
+
+        Returns:
+            Dual number : the result of dividing the scalar by a dual number.
+        """
+        if (self.real==0):
+            logging.warning("Division is not defined when the real part of the dual number (denominator) is zero")
+            return np.nan
+        real = x / self.real
+        dual = -(self.dual*x)/(self.real**2)
+        return Dual(real,dual)
+        
 
     def __itruediv__(self, x):
         """
@@ -104,7 +135,7 @@ class Dual:
             x: the dual number or scalar to divide our current instance with.
 
         Returns:
-            dual number: the result of  dividing the current instance by the input (dual number or scalar).
+            Dual number: the result of  dividing the current instance by the input (dual number or scalar).
         
         Raises:
             Warning: If division by zero is attempted.
@@ -132,13 +163,26 @@ class Dual:
             x: the dual number or scalar to subtract from our current instance.
 
         Returns:
-            dual number: the result of the subtraction of the input (dual number or scalar) from the current instance.
+            Dual number: the result of the subtraction of the input (dual number or scalar) from the current instance.
         """
         if isinstance(x, Dual):
             return Dual(self.real-x.real,self.dual-x.dual)
         else:
             return Dual(self.real-x,self.dual)
 
+    def __rsub__(self, x):
+        """
+        Redefines the reverse ``-`` operator to adapt it to dual numbers.
+        Considers the case where we have :scalar-dual number
+
+        Parameters:
+            x: the scalar to add to our current instance.
+
+        Returns:
+            Dual number : the result of the subtraction of the scalar and the current instance.
+        """
+        return Dual(x-self.real,-self.dual)
+    
     def __isub__(self,x):
         """
         Redefines the ``-=`` operator to adapt it to dual numbers.
@@ -147,7 +191,7 @@ class Dual:
             x: the dual number or scalar to subtract from our current instance.
 
         Returns:
-            dual number: the result of the subtraction of the input (dual number or scalar) from the current instance.
+            Dual number: the result of the subtraction of the input (dual number or scalar) from the current instance.
         """
         if isinstance(x, Dual):
             self.real-=x.real
@@ -165,7 +209,7 @@ class Dual:
             x: the dual number or scalar to multiply our current instance with.
 
         Returns:
-            dual number: the result of the multiplication between the input (dual number or scalar) and the current instance.
+            Dual number: the result of the multiplication between the input (dual number or scalar) and the current instance.
         """
         if isinstance(x, Dual):
             real=self.real*x.real
@@ -174,6 +218,20 @@ class Dual:
         else:
             return Dual(self.real*x,self.dual*x)
         
+    def __rmul__(self, x):
+
+        """
+        Redefines the reverse ``*`` operator to adapt it to dual numbers.
+        Considers the case where we have :scalar*dual number
+
+        Parameters:
+            x: the scalar to add to our current instance.
+
+        Returns:
+            Dual number : the result of the the multiplication between the scalar and the current instance.
+        """
+        return self * x
+
     def __imul__(self,x):
         """
         Redefines the ``*=`` operator to adapt it to dual numbers.
@@ -182,7 +240,7 @@ class Dual:
             x: the dual number or scalar to multiply our current instance with.
 
         Returns:
-            dual number: the result of the multiplication between the input (dual number or scalar) and the current instance.
+            Dual number: the result of the multiplication between the input (dual number or scalar) and the current instance.
 
         """
         if isinstance(x, Dual):
@@ -205,7 +263,7 @@ class Dual:
             x: the power to which we want to raise the current instance.
 
         Returns:
-            dual number: the current instance raised to the power of the input.
+            Dual number: the current instance raised to the power of the input.
 
         Raises:
             Warning: If the power is a dual number.
@@ -232,7 +290,7 @@ class Dual:
             x: the power to which we want to raise the current instance.
 
         Returns:
-            dual number: the current instance raised to the power of the input.
+            Dual number: the current instance raised to the power of the input.
 
         Raises:
             Warning: If the power is a dual number.
@@ -255,13 +313,157 @@ class Dual:
             self.dual=dual
             return self
 
+    def __floordiv__(self,x):
+        """
+        Redefines the ``//`` operator to adapt it to dual numbers.
+
+        Parameters:
+            x: the dual number or scalar to divide our current instance with.
+
+        Returns:
+            Dual number: the result of the floor division between the current instance and the input (dual number or scalar).
+        
+        Raises:
+            Warning: If division by zero is attempted.
+        """
+        if isinstance(x, Dual):
+            if (x.real == 0):
+                logging.warning("Floor division of dual numbers is not defined when the real part of the denominator is zero")
+                return np.nan
+            real= self.real // x.real
+            dual= (self.dual * x.real - self.real * x.dual) // (x.real ** 2)
+            return Dual(real,dual)
+        else:
+            real=self.real//x
+            dual=self.dual//x
+            return Dual(real,dual)
+
+    def __rfloordiv__(self, x):
+        """
+        Redefines the reverse ``//`` operator to adapt it to dual numbers.
+        Considers the case where we have: scalar//dual number
+
+        Parameters:
+            x: the scalar that is the numerator of the division.
+
+        Returns:
+            dual number : the result of the floor division between the scalar and a dual number.
+        """
+        if (self.real==0):
+            logging.warning("Division is not defined when the real part of the dual number (denominator) is zero")
+            return np.nan
+        real = x // self.real
+        dual = -(self.dual*x)//(self.real**2)
+        return Dual(real,dual)
+
+    def __ifloordiv__(self,x):
+        """
+        Redefines the ``//=`` operator to adapt it to dual numbers.
+
+        Parameters:
+            x: the dual number or scalar to divide our current instance with.
+
+        Returns:
+            Dual number: the result of the floor division between the current instance and the input (dual number or scalar).
+        
+        Raises:
+            Warning: If division by zero is attempted.
+        """
+        if isinstance(x, Dual):
+            if (x.real == 0):
+                logging.warning("Division is not defined when the real part of the dual number (denominator) is zero")
+                return np.nan
+            real= self.real // x.real
+            dual= (self.dual * x.real - self.real * x.dual) // (x.real ** 2)
+            self.real=real
+            self.dual=dual
+            return self
+        else:
+            self.real//=x
+            self.dual//=x
+            return self
+    
+    def __mod__(self,x):
+        """
+        Redefines the ``%`` operator to adapt it to dual numbers.
+
+        Parameters:
+            x: the dual number or scalar to compute the modulus with.
+
+        Returns:
+            Dual number: the result of the modulus operation.
+        
+        Raises:
+            Warning: If modulus by zero is attempted.
+        """
+        if isinstance(x, Dual):
+            if (x.real == 0):
+                logging.warning("Floor division of dual numbers is not defined when the real part of the denominator is zero")
+                return np.nan
+            real= self.real % x.real
+            dual= (self.dual * x.real - self.real * x.dual) % (x.real ** 2)
+            return Dual(real,dual)
+        elif isinstance(x, (int, float)):
+            real=self.real%x
+            dual=self.dual%x
+            return Dual(real,dual)
+        else:
+            raise TypeError("Unsupported type for modulus operation")
+
+    def __imod__(self,x):
+        """
+        Redefines the ``%=`` operator to adapt it to dual numbers.
+
+        Parameters:
+            x: the dual number or scalar to compute the modulus with.
+
+        Returns:
+            Dual number: the result of the modulus operation.
+        
+        Raises:
+            Warning: If modulus by zero is attempted.
+        """
+        if isinstance(x, Dual):
+            if (x.real == 0):
+                logging.warning("Floor division of dual numbers is not defined when the real part of the denominator is zero")
+                return np.nan
+            real= self.real % x.real
+            dual= (self.dual * x.real - self.real * x.dual) % (x.real ** 2)
+            self.real=real
+            self.dual=dual
+            return self
+        else:
+            self.real%=x
+            self.dual%=x
+            return self
+
+    def __rmod__(self,x):
+        """
+        Redefines the reverse ``%`` operator to adapt it to dual numbers.
+        Considers the case where we have: scalar%dual number
+
+        Parameters:
+            x: the scalar to compute the modulus with.
+
+        Returns:
+            Dual number: the result of the modulus operation.
+        
+        Raises:
+            Warning: If modulus by zero is attempted.
+        """
+        if (self.real==0):
+            logging.warning("Modulus by zero is not defined")
+            return np.nan
+        real = x % self.real
+        dual = -(self.dual*x)%(self.real**2)
+        return Dual(real,dual)
 
     def __neg__(self):
         """
         Redefines the ``-`` operator to adapt it to dual numbers.
 
         Returns:
-            dual number: the negation of the current instance.
+            Dual number: the negation of the current instance.
         """
         return Dual(-self.real,-self.dual)
 
@@ -303,7 +505,7 @@ class Dual:
         Redefines the abs function to adapt it to dual numbers.
 
         Returns:
-            dual number: the absolute value of the current instance.
+            Dual number: the absolute value of the current instance.
         """
         return Dual(np.abs(self.real),np.abs(self.dual))
 
@@ -312,9 +514,9 @@ class Dual:
         Computes the sine function of the dual number.
 
         Returns:
-            A dual number where: 
-                        the real part is the sine function of the real part of the current instance.
-                        the dual part is the derivative of the sine function evaluated at the real part of the current instance multiplied with the dual part of the current instance.
+            Dual number : 
+                        The real part of the reult is the sine function of the real part of the current instance.
+                        The dual part of the result is the derivative of the sine function evaluated at the real part of the current instance multiplied with the dual part of the current instance.
         """    
         dual=self.dual*np.cos(self.real)
         return  Dual(np.sin(self.real),dual)
@@ -324,9 +526,9 @@ class Dual:
         Computes the cosine function of the dual number.
 
         Returns:
-            A dual number where: 
-                        the real part is the cosine function of the real part of the current instance.
-                        the dual part is the derivative of the cosine function evaluated at the real part of the current instance multiplied with the dual part of the current instance.
+            Dual number: 
+                        The real part of the result is the cosine function of the real part of the current instance.
+                        The dual part of the result is the derivative of the cosine function evaluated at the real part of the current instance multiplied with the dual part of the current instance.
         """  
         dual=self.dual*-np.sin(self.real)
         return  Dual(np.cos(self.real),dual)
@@ -336,9 +538,9 @@ class Dual:
         Computes the tangent function of the dual number.
 
         Returns:
-            A dual number where: 
-                        the real part is the tangent function of the real part of the current instance.
-                        the dual part is the derivative of the tangent function evaluated at the real part of the current instance multiplied with the dual part of the current instance.
+            Dual number: 
+                        The real part of the result is the tangent function of the real part of the current instance.
+                        The dual part of the result is the derivative of the tangent function evaluated at the real part of the current instance multiplied with the dual part of the current instance.
 
         Raises:
             Warning: if the cosine of the real part is 0; division by 0 is an error.
@@ -354,9 +556,9 @@ class Dual:
         Computes the logarithm function of the dual number.
 
         Returns:
-            A dual number where: 
-                        the real part is the log of the real part of the current instance.
-                        the dual part is the derivative of the log evaluated at the real part of the current instance multiplied with the dual part of the current instance.
+            Dual number : 
+                        The real part of the result is the log of the real part of the current instance.
+                        The dual part of the result is the derivative of the log evaluated at the real part of the current instance multiplied with the dual part of the current instance.
 
         Raises:
             Warning: if the real part of the instance is 0; division by 0 is an error.
@@ -373,9 +575,9 @@ class Dual:
         Computes the exponential function of the dual number.
 
         Returns:
-            A dual number where: 
-                        the real part is the exp of the real part of the current instance.
-                        the dual part is the derivative of the exp evaluated at the real part of the current instance multiplied with the dual part of the current instance.
+            Dual number: 
+                        The real part of the result is the exp of the real part of the current instance.
+                        The dual part of the result is the derivative of the exp evaluated at the real part of the current instance multiplied with the dual part of the current instance.
         """  
         dual=np.exp(self.real)*self.dual
         return  Dual(np.exp(self.real),dual)
@@ -386,9 +588,9 @@ class Dual:
         Computes the square of the dual number.
 
         Returns:
-            A dual number where: 
-                        the real part is the square of the real part of the current instance.
-                        the dual part is the derivative of the square function evaluated at the real part of the current instance multiplied with the dual part of the current instance.
+            Dual number:  
+                        The real part of the result is the square of the real part of the current instance.
+                        The dual part of the result is the derivative of the square function evaluated at the real part of the current instance multiplied with the dual part of the current instance.
         """  
         dual=2*self.real*self.dual
         return  Dual(np.square(self.real),dual)
@@ -399,9 +601,9 @@ class Dual:
         Computes the floor of the dual number.
 
         Returns:
-            A dual number where: 
-                        the real part is the floor of the real part of the current instance.
-                        the dual part is the floor of the dual part of the current instance.
+            Dual number : 
+                        The real part of the result is the floor of the real part of the current instance.
+                        The dual part of the result is the floor of the dual part of the current instance.
         """  
         return  Dual(np.floor(self.real),np.floor(self.dual))
 
@@ -411,9 +613,9 @@ class Dual:
         Computes the ceil of the dual number.
 
         Returns:
-            A dual number where: 
-                        the real part is the ceil of the real part of the current instance.
-                        the dual part is the ceil of the dual part of the current instance.
+            Dual number: 
+                        The real part of the result is the ceil of the real part of the current instance.
+                        The dual part of the result is the ceil of the dual part of the current instance.
         """  
         return  Dual(np.ceil(self.real),np.ceil(self.dual))
 
@@ -422,9 +624,9 @@ class Dual:
         Computes the inverse of the dual number.
 
         Returns:
-            A dual number where: 
-                        the real part is the inverse of the real part of the current instance.
-                        the dual part is the derivative of the inverse evaluated at the real part of the current instance multiplied with the dual part of the current instance.
+            Dual number: 
+                        The real part of the result is the inverse of the real part of the current instance.
+                        The dual part of the result is the derivative of the inverse evaluated at the real part of the current instance multiplied with the dual part of the current instance.
         Raises:
             Warning: if the real part of the instance is 0; division by 0 is an error.
         """  

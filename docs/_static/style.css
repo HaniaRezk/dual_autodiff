@@ -6,7 +6,7 @@
 .exercise-box {
     border: 2px solid #4CAF50;  /* Green border */
     padding: 15px;
-    background-color: #f0f9ff;  /* Light blue background */
+    background-color: #fffaf0; 
     border-radius: 10px;        /* Rounded corners */
     margin: 20px 0;
 }

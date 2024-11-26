@@ -47,7 +47,7 @@ exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store', 'tutorial_notebooks/tuto
 # a list of builtin themes.
 #
 html_theme = 'sphinx_rtd_theme'
-
+#html_theme = 'alabaster'
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
@@ -74,7 +74,7 @@ html_theme_options = {
 autodoc_default_flags = ['members', 'undoc-members']
 autodoc_default_options = {
     'members': True,         # Include all class members
-    'special-members': '__str__,__add__,__iadd__,__sub__,__isub__,__mul__,__imul__,__eq__,__ne__,__truediv__,__itruediv__,__pow__,__ipow__,__neg__,test_eq,test_eq_scalar,test_tan',  # Add specific special methods you want documented
+    'special-members': '__str__,__add__,__iadd__,__radd__,__sub__,__isub__,__rsub__,__mul__,__imul__,_rmul__,__eq__,__ne__,__truediv__,__itruediv__,__rtruediv__,__pow__,__ipow__,__neg__,__eq__,__mod__,__imod__,__rmod__,__floordiv__,__ifloordiv__,__rfloordiv__,',  # Add specific special methods you want documented
     'undoc-members': True,   # Include members without docstrings
     'show-inheritance': True # Show class inheritance hierarchy
 }
