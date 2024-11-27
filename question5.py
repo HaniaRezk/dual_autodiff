@@ -57,6 +57,7 @@ def f_numerically(x,h):
     """
     return (f(x+h)-f(x))/h
 
+@time_decorator
 def f_AD(x):
     """
     The function that computes the derivative of f(x) using automatic differentiation.
@@ -78,12 +79,58 @@ print("Derivative of f(x) using dual numbers is ", result_dual)
 print("Analytical derivative of f(x)  is ", result_analytical)
 print("Numerical derivative of f(x), with step size= 1e-10 is ", f_numerically(1.5,1e-10))
 
+def numerical_values():
+    """
+    A function that plots the numerical derivative for different step sizes h.
+    """
+    numerical_results=[]
+    step_size = [1,0.5,0.01,0.001,0.0001,0.00001,0.000001,1e-7,1e-8,1e-9,1e-10,1e-11,1e-12,1e-13,1e-14,1e-15,1e-16,1e-17,1e-18]
+    #,1e-7,1e-8,1e-10,1e-11,1e-12,1e14]
+    for h in step_size:
+        numerical_results.append(f_numerically(1.5,h))
+    plt.plot(step_size,numerical_results,label="Numerical derivative")
+    plt.axhline(y=result_analytical, color='r', label="Analytical derivative")
+    plt.xlabel("Step size")
+    plt.xscale('log')
+    plt.ylabel("Numerical derivatives")
+    plt.title("Figure 1")
+    plt.grid()
+    plt.legend()
+    plt.show()
+
+numerical_values()
+
+
+
+def interval():
+    """
+    A function that plots the numerical derivative for step sizes h in the interval [1e-16,1e-13].
+    """
+    numerical_results=[]
+    values = np.logspace(-16, -13, num=1000)
+    for h in values:
+        numerical_results.append(f_numerically(1.5,h))
+    plt.plot(values,numerical_results,label="Numerical derivative")
+    plt.axhline(y=result_analytical, color='r', label="Analytical derivative")
+    plt.xlabel("Step size")
+    plt.xscale('log')
+    plt.ylabel("Numerical derivatives")
+    plt.title("Figure 2")
+    plt.grid()
+    plt.legend()
+    plt.show()
+
+interval()
+
+
+'''
 def plot_analytical_numerical():
     """
     A function that plots the absolute differences between the analytical and numerical derivatives for different step sizes h.
     """
     numerical_results=[]
-    step_size = [1,0.5,0.3,0.01,0.001,0.0001,0.00001,0.000001,1e-7,1e-8,1e-10,1e-11,1e-12,1e14]
+    step_size = [1,0.5,0.3,0.01,0.001,0.0001,0.00001,0.000001,1e-7,1e-8,1e-10,1e-11,1e-12]
+    #,1e-7,1e-8,1e-10,1e-11,1e-12,1e14]
     for h in step_size:
         numerical_results.append(f_numerically(1.5,h))
 
@@ -91,10 +138,8 @@ def plot_analytical_numerical():
     plt.ylabel("Step size")
     plt.yscale('log')
     plt.xlabel("Absolute differences between analytical and numerical derivatives")
-    plt.legend()
     plt.grid()
     plt.show()
 
-
-
-
+plot_analytical_numerical()
+'''

@@ -19,7 +19,7 @@ A Python package that performs automatic differentiation using dual numbers.
     * Basic arithmetic operations for dual numbers
     * Other essential functions for automatic differentiation (sin,cos,exp,..)
 
-* A comprehensive test suite that civer a meaningful range of cases. You can execute these tests with pytest by running the command:
+* A comprehensive test suite that cover a meaningful range of cases. You can execute these tests with pytest by running the command:
 
 ```bash
 pytest -s tests/*
@@ -56,5 +56,10 @@ print(x*y)
 
 ## Documentation
 
-Visit the [documentation page](https://your-readthedocs-url-here).
+A Sphinx documentation was used to generate the documentation for this package. You can generate the html documentation page by running the following command from the docs folder.
+
+```bash
+make htm 
+```
+The documentation can be viewed by opening docs/build/html/index.html in a web browser.
 
