@@ -1,0 +1,150 @@
+\documentclass[a4paper,12pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{hyperref}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{enumitem}
+
+\title{\Huge \textbf{C1 Research Computing Coursework Report}} 
+\author{Hania Rezk (hhmmer2) \\ 
+\\
+MPhil Data Intensive Science, Department of Physics}
+\date{26 November 2024}
+
+\begin{document}
+
+\maketitle
+
+
+\noindent \textbf{Word count:} [1000] \\
+
+\newpage  
+\tableofcontents
+
+\newpage  
+
+
+\section{Introduction}
+This report discusses the development of a Python package that performs automatic differentiation using dual numbers. Dual numbers, represented as $x = a + b\epsilon$, consist of a real part $a$, and a dual part $b$ that is carried by $\epsilon$ and satisfies $\epsilon^2 = 0$. These numbers are used to compute derivatives efficiently; this approach, called forward-mode automatic differentiation, is particularly valuable in fields like machine learning as it enables fast training of deep neural networks.
+
+This report describes the step-by-step creation of this package and answers the questions of the coursework sheet. First, we will overview the global structure of the package (question 2 of CW) then present the \texttt{Dual} class which allows us to represent and perform operations and functions on dual numbers. To make sure our \texttt{Dual} class works as expected, a test suite that covers a meaningful range of cases was implemented. Using the \texttt{Dual} class, this package differentiates a function and compares the result to the analytical and numerical derivatives to measure the precision of automatic differentiation (question 5 of CW). Finally, we will Cythonize the package and compare its performance to the pure Python version (question 8 of CW). The entirety of the code is documented according to the good practices taught in the Research Computing module.
+
+\section{Package Structure and Project Configuration}
+This package respects the structure seen in the Research Computing course as shown below.
+
+\begin{verbatim}
+    .
+    +-- pyproject.toml               # Configuration 
+    +-- README.md                    # Instructions
+    +-- dual_autodiff/               # Package folder with codes
+    |   +-- __init__.py
+    |   +-- version.py               # Manage package versions
+    |   +-- dual.py                  # Dual class
+    +-- dist/                        # Distribution files
+    +-- docs/                        # Documentation files
+    |   +-- Makefile                 # Commands to build the documentation
+    |   +-- requirements.txt              
+    |   +-- conf.py                  # Configuration of the documentation
+    |   +-- index.rst                # The main page of the documentation
+    |   +-- material/                
+    +-- tests/                       # Test folder
+    |   +-- autodiff_tools.py        # Test suite for Dual class
+    +-- Question5.py                 # Code for question 5 of the coursework
+\end{verbatim}
+
+
+\section{\texttt{Dual} Class}
+The main file of this package is called \texttt{dual.py}. It contains the core module of our package and defines the \texttt{Dual} class. This class defines a structure for dual numbers and performs standard operations on them. An instance of this class has two attributes: one to represent the real part of our number and another to represent the dual part of our number.
+
+Automatic differentiation exploits the fact that every computer calculation executes a sequence of elementary arithmetic operations and functions; this highlights the importance of the next part.
+
+\subsection{Operators}
+The \texttt{Dual} class redefines the standard operators to make them compatible with dual numbers. The operators that are redefined are: \texttt{+}, \texttt{-}, \texttt{*}, \texttt{**}, \texttt{/}, \texttt{//}, \texttt{\%}, \texttt{==}, \texttt{!=}. The redefinitions consider a wide range of cases, illustrated by examining $y$ (operator) $x$:
+\begin{itemize}
+    \item The \texttt{if isinstance(x, Dual)} block considers the case where both $x$ and $y$ are dual numbers.
+    \item The \texttt{else} block considers the case where $x$ is a scalar.
+\end{itemize}
+For each arithmetic operator, reverse operations are defined when $y$ is not a dual number. Division, floor division, and modulus operators raise a \texttt{DivisionByZeroError} when the denominator is zero.
+
+Short-hand versions of the operators (\texttt{+=}, \texttt{-=}, etc.) are also redefined.
+
+\subsubsection{Details}
+For example, the \texttt{\_\_add\_\_}, \texttt{\_\_iadd\_\_}, and \texttt{\_\_radd\_\_} methods redefine the \texttt{+} operator as follows:
+\begin{enumerate}
+    \item If both $x$ and $y$ are dual numbers, $y = a' + b'\epsilon$ and $x = a + b\epsilon$, \texttt{y.\_\_add\_\_(x)} is called:
+    \[
+    y + x = (a' + a) + (b' + b)\epsilon
+    \]
+    \item If $y$ is a dual number and $x$ is a scalar:
+    \[
+    y + x = (a' + x) + b'\epsilon
+    \]
+    \item If $x$ is a dual number and $y$ is a scalar, \texttt{y.\_\_radd\_\_(x)} is called:
+    \[
+    x + y = (a + y) + b\epsilon
+    \]
+\end{enumerate}
+
+For the arithmetics operators, this package also redefines their short-hand version: \texttt{+=}, \texttt{-=}, \texttt{/=}, \texttt{\%=}, \texttt{*=}, \texttt{**=}.
+
+\subsection{Functions}
+The \texttt{Dual} class also defines essential functions to make them compatible with dual numbers. The essential functions defined are: exponential, sine, cosine, tangent, logarithm, ceil, floor, inverse, square, and abs.
+Like the case of our operators, the definition of our functions also considers illegal calls for the functions : inverse logarithm and tangent, and an error is raised to prevent a division by zero.
+
+\subsubsection{Details}
+The definition of essential functions lies completely on the f(a + b\epsilon\)) formula that was provided for us in the coursework sheet, which provides us with the formulas for the real part and the dual part of the returns of each of our functions:
+
+\[
+f(a + b\epsilon) = f(a) + f'(a)b\epsilon
+\]
+The real part corresponds to $f(a)$, and the dual part corresponds to $f'(a)b$.
+The only work we have to do is compute the derivative of each essential functions we defined.
+
+\begin{itemize}
+    \item Derivative of $\exp(x)$ is $\exp(x)$.
+    \item Derivative of $\log(x)$ is $1/x$, raising a \texttt{ZeroDivisionError} when the real part of $x=0$.
+    \item Derivative of $\tan(x)$ is $1/\cos^2(x)$, raising a \texttt{ZeroDivisionError} when $\cos(x.real) \approx 0$ (detected using \texttt{np.isclose()}).
+    \item Derivative of $\cos(x)$ is -$\sin(x)$.
+    \item Derivative of $\sin(x)$ is $\cos(x)$.
+    \item Derivative of $square(x)$ is 2$x$.
+    \item Derivative of $inverse(x)$ is -1/$x^2$, raising a \texttt{ZeroDivisionError} when the real part of $x=0$.
+
+
+\end{itemize}
+
+For \texttt{abs(x)}, \texttt{floor(x)}, and \texttt{ceil(x)}, we just apply these to the real part and the dual part of the dual number x.
+
+\section{Test Suite}
+To ensure the reliability of our \texttt{Dual} class, a comprehensive test suite was developed. 
+The \texttt{autodiff\_tools.py} file in the \texttt{tests} folder executes 31 tests on our class, with each test corresponding to a specific function in the dual.py file. We tested a variety of dual numbers with both integer and float values for their real and dual parts. For functions that raise errors, invalid inputs were also tested to ensure the correct errors were produced.
+To run the tests with pytest, run the following command in your terminal from the project repository:
+
+\begin{verbatim}
+pytest -s tests/*
+\end{verbatim}
+\section{Differentiating a function}
+\section{Documentation}
+Since the first file created in my package, I made sure to document my code using docstrings. Each function includes a docstring that describes its purpose, parameters and returns values, which was very helpful when generating the Sphinx documentation. The structure mirrors the \texttt{Read the Docs} page of the C1 course, as I used a theme provided by Read the Docs ('sphinx\_rtd\_theme'), and copied the structure of the docs folder in the GitHub repository of the research computing course created by Dr. Boris Bolliet. 
+To generate the html pages of the documentation, please run the following command in your terminal from docs folder (present in the project repository):
+\begin{verbatim}
+make html
+\end{verbatim}
+The documentation can be viewed by opening docs/build/html/index.html in a web browser.
+\section{Questions 8-9}
+\section{Summary}
+\section{Declaration of AI Tools}
+ChatGPT was the only AI tool used in the creation of this project. It was primarily used to correct spelling mistakes in this report, and correct my .tex file (source of this LATEX report). However, the entire report was written by me and I didn’t use any sentence reconstruction recommendations. ChatGPT was also used to generate values of the dual numbers used in my tests and provided me with the results of the operations on these numbers: It did not write the code or any part of it, it just gave me an output that looks like this: 
+\\
+
+\textbf{Example of Dual Numbers Addition:}
+\[
+x = \text{Dual}(5, 3), \quad y = \text{Dual}(2, 4), \quad x + y = \text{Dual}(7, 7)
+\]
+
+\section{References}
+\begin{enumerate}
+    \item \url{https://en.wikipedia.org/wiki/Automatic_differentiation}
+    \item \url{https://github.com/borisbolliet/ResearchComputing/tree/main/docs}
+\end{enumerate}
+
+\end{document}
