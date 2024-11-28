@@ -498,8 +498,63 @@ class Dual:
             return ((self.real!=x.real) or (self.dual!=x.dual))
         else:
             return((self.real!=x) or (self.dual!=0))
-        
 
+    def __gt__(self,x):
+        """
+        Alerts the user that the ``>`` operator not defined for dual numbers.
+
+        Returns:
+            Bool: Comparasion based on the real parts of the dual numbers.
+        """
+        if isinstance(x, Dual):
+            logging.warning("> comparision not defined for dual numbers: return type corresponds to the comparision between the real part of the numbers.")
+            return self.real > x.real
+        else:
+            logging.warning("> comparision not defined for dual numbers: return type corresponds to the comparision between the real part of the dual number and the scalar.") 
+            return self.real > x
+
+    def __ge__(self,x):
+        """
+        Alerts the user that the ``>=`` operator not defined for dual numbers.
+
+        Returns:
+            Bool: Comparasion based on the real parts of the dual numbers.
+        """
+        if isinstance(x, Dual):
+            logging.warning(">= comparision not defined for dual numbers: return type corresponds to the comparision between the real part of the numbers.")
+            return self.real >= x.real
+        else:
+            logging.warning(">= comparision not defined for dual numbers: return type corresponds to the comparision between the real part of the dual number and the scalar.") 
+            return self.real >= x
+
+    def __lt__(self,x):
+        """
+        Alerts the user that the ``<`` operator not defined for dual numbers.
+
+        Returns: 
+            Bool: Comparasion based on the real parts of the dual numbers.
+        """
+        if isinstance(x, Dual):
+            logging.warning("< comparision not defined for dual numbers: return type corresponds to the comparision between the real part of the numbers.")
+            return self.real < x.real
+        else: 
+            logging.warning("< comparision not defined for dual numbers: return type corresponds to the comparision between the real part of the dual number and the scalar.") 
+            return self.real < x
+
+    def __le__(self,x):
+        """
+        Alerts the user that the ``<=`` operator not defined for dual numbers.
+
+        Returns: 
+            Bool: Comparasion based on the real parts of the dual numbers.
+        """
+        if isinstance(x, Dual):
+            logging.warning("<= comparision not defined for dual numbers: return type corresponds to the comparision between the real part of the numbers.")
+            return self.real <= x.real
+        else: 
+            logging.warning("<= comparision not defined for dual numbers: return type corresponds to the comparision between the real part of the dual number and the scalar.") 
+            return self.real <= x
+        
     def __abs__(self):
         """
         Redefines the abs function to adapt it to dual numbers.
