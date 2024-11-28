@@ -67,10 +67,7 @@ nbsphinx_execute_arguments = [
 secnumber_suffix = ''  # No suffix means no section numbers
 # numfig = False  # Disable figure/table numbering if you don't need them
 
-# Add GitHub repository settings
-html_theme_options = {
-    'repository_url': 'https://github.com/HaniaRezk/',
-}
+
 autodoc_default_flags = ['members', 'undoc-members']
 autodoc_default_options = {
     'members': True,         # Include all class members

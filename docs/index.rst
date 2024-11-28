@@ -36,8 +36,6 @@ To install the package:
    material/part3/notebook
    material/part4/notebook
    material/part5/notebook
-   material/part6/notebook
-
 
 Useful Resources 
 ----------------------------------------

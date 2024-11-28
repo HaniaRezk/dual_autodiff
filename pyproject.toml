@@ -1,7 +1,10 @@
+[build-system]
+requires = ["setuptools", "wheel"] 
+build-backend = "setuptools.build_meta"
 
 [project]
 name="dual_autodiff"
-dynamic=["version"]
+dynamic = ["version"]
 description="A python package that performs automatic differentiation using dual numbers"
 readme="README.md"
 requires-python=">=3.9"
@@ -9,9 +12,9 @@ authors=[{name="Hania Rezk", email="hhmmer2@cam.ac.uk"}]
 keywords=["dual numbers", "automatic differentiation"]
 dependencies=["numpy"]
 
-[project.urls]
-"Documentation" = "https://your-readthedocs-url-here"
-
-
 [tools.setuptools_scm]
+version_scheme = "post-release"
 write_to="dual_autodiff/version.py"
+
+[tool.setuptools.packages.find]
+where = ["."]

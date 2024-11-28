@@ -72,12 +72,13 @@ def f_AD(x):
     result=(x1.cos()*x1.square() + (x1.sin()).log())
     return result.dual
 
-
+'''
 result_dual=f_AD(1.5)
 result_analytical=f_analytical(1.5)
 print("Derivative of f(x) using dual numbers is ", result_dual)
 print("Analytical derivative of f(x)  is ", result_analytical)
 print("Numerical derivative of f(x), with step size= 1e-10 is ", f_numerically(1.5,1e-10))
+'''
 
 def numerical_values():
     """
@@ -98,7 +99,7 @@ def numerical_values():
     plt.legend()
     plt.show()
 
-numerical_values()
+#numerical_values()
 
 
 
@@ -120,7 +121,7 @@ def interval():
     plt.legend()
     plt.show()
 
-interval()
+#interval()
 
 
 '''

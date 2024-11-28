@@ -64,6 +64,17 @@ def test_iadd_scalar():
     assert y.real==9
     assert y.dual==12
 
+
+def test_radd_scalar():
+    """
+    A test that makes sure that the reverse operator ``+`` correctly adds a scalar to a dual number.
+
+    """
+    x=Dual(7,12)
+    y=2+x
+    assert y.real==9
+    assert y.dual==12
+
 def test_subtract():
     """
     A test that makes sure that the operator ``-`` correctly subtracts dual numbers.
@@ -109,6 +120,17 @@ def test_isubtract_scalar():
     assert y.real==5
     assert y.dual==12
 
+
+def test_rsub_scalar():
+    """
+    A test that makes sure that the reverse operator ``-`` correctly subtracts a dual number from a scalar.
+
+    """
+    x=Dual(7,12)
+    y=2-x
+    assert y.real==-5
+    assert y.dual==-12
+
 def test_multiply():
     """
     A test that makes sure that the operator ``*`` correctly multiplies two dual numbers.
@@ -150,6 +172,16 @@ def test_imultiply_scalar():
     y*=10
     assert y.real==0
     assert y.dual==25
+
+def test_rmul_scalar():
+    """
+    A test that makes sure that the reverse operator ``*`` correctly multiplies a dual number and a scalar.
+
+    """
+    x=Dual(7,12)
+    y=2*x
+    assert y.real==14
+    assert y.dual==24
 
 def test_div():
     """
@@ -202,6 +234,19 @@ def test_idiv_scalar():
     assert x.real==1
     assert x.dual==1.5
 
+def test_rdiv_scalar():
+    """
+    A test that makes sure that the reverse operator ``/`` correctly divides a scalar by a dual number.
+
+    """
+    x=Dual(7,12)
+    x1=Dual(0,10)
+    y=2/x
+    z=2/x1
+    assert y.real==(2/7)
+    assert y.dual==(-24/49)
+    assert np.isnan(z)
+
 def test_eq():
     """
     A test that makes sure that the operator ``==`` correctly identifies when two dual numbers are equal.
@@ -209,7 +254,9 @@ def test_eq():
     """
     x=Dual(1.5,8)
     y=Dual(1.5,8)
+    z=Dual(1.5001,8)
     assert y==x
+    assert not(z==x)
 
 def test_eq_scalar():
     """
@@ -218,7 +265,9 @@ def test_eq_scalar():
     """
     y=4
     x=Dual(4,0)
+    x1=Dual(4,0.001)
     assert y==x
+    assert not (y==x1)
 
 def test_ne():
     """
@@ -227,7 +276,9 @@ def test_ne():
     """
     x=Dual(1,9)
     y=Dual(1,90)
+    y1=Dual(1,9)
     assert x!=y
+    assert not (x!=y1)
 
 def test_ne_scalar():
     """
@@ -235,8 +286,55 @@ def test_ne_scalar():
 
     """
     x=Dual(4,1)
-    y=4
-    assert x!=y
+    y=Dual(4,0)
+    assert x!=4
+    assert not (y!=4)
+
+def test_ge():
+    """
+    A test that makes sure that the operator ``>=`` behaves according to its redefinition.
+
+    """
+    x=Dual(1,9)
+    y=Dual(2,90)
+    assert y>=x
+    assert y>=2
+    assert 7>=y
+    assert not(x>4)
+
+def test_gt():
+    """
+    A test that makes sure that the operator ``>`` behaves according to its redefinition.
+
+    """
+    x=Dual(1,9)
+    y=Dual(2,90)
+    assert y>x
+    assert not(y>2)
+    assert 8>y
+
+def test_lt():
+    """
+    A test that makes sure that the operator ``<`` behaves according to its redefinition.
+
+    """
+    x=Dual(1,9)
+    y=Dual(2,90)
+    assert x<y
+    assert 0<x
+    assert x<5
+    assert not(1<x)
+
+def test_le():
+    """
+    A test that makes sure that the operator ``<=`` behaves according to its redefinition.
+
+    """
+    x=Dual(1,9)
+    y=Dual(2,90)
+    assert x<=y
+    assert 1<=y
+    assert not(y<=0)
 
 def test_power():
     """
