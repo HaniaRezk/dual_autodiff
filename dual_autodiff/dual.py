@@ -501,59 +501,87 @@ class Dual:
 
     def __gt__(self,x):
         """
-        Alerts the user that the ``>`` operator not defined for dual numbers.
+        Redefines the ``>`` operator for dual numbers.
+        Alerts the user that the ``>`` operator not defined for dual numbers if their real part is not nul.
 
         Returns:
             Bool: Comparasion based on the real parts of the dual numbers.
         """
         if isinstance(x, Dual):
-            logging.warning("> comparision not defined for dual numbers: return type corresponds to the comparision between the real part of the numbers.")
-            return self.real > x.real
+            if (x.dual==0 and self.dual==0):
+                return self.real>x.real
+            else:
+                logging.warning("> comparision not defined for dual numbers with non nul dual parts. Return type corresponds to the comparision between the real part of the numbers.")
+                return self.real > x.real
         else:
-            logging.warning("> comparision not defined for dual numbers: return type corresponds to the comparision between the real part of the dual number and the scalar.") 
-            return self.real > x
+            if (self.dual==0):
+                return self.real>x.real
+            else:
+                logging.warning("> comparision not defined for dual numbers with non nul dual parts. Return type corresponds to the comparision between the real part of the dual number and the scalar.") 
+                return self.real > x
 
     def __ge__(self,x):
         """
-        Alerts the user that the ``>=`` operator not defined for dual numbers.
+        Redefines the ``>=`` operator for dual numbers.
+        Alerts the user that the ``>=`` operator not defined for dual numbers if their real part is not nul.
 
         Returns:
             Bool: Comparasion based on the real parts of the dual numbers.
         """
         if isinstance(x, Dual):
-            logging.warning(">= comparision not defined for dual numbers: return type corresponds to the comparision between the real part of the numbers.")
-            return self.real >= x.real
+            if (x.dual==0 and self.dual==0):
+                return self.real>=x.real
+            else:
+                logging.warning(">= comparision not defined for dual numbers with non nul dual parts. Return type corresponds to the comparision between the real part of the numbers.")
+                return self.real >= x.real
         else:
-            logging.warning(">= comparision not defined for dual numbers: return type corresponds to the comparision between the real part of the dual number and the scalar.") 
-            return self.real >= x
+            if (self.dual==0):
+                return self.real>=x.real
+            else:
+                logging.warning(">= comparision not defined for dual numbers with non nul dual parts. Return type corresponds to the comparision between the real part of the dual number and the scalar.") 
+                return self.real >= x
 
     def __lt__(self,x):
         """
-        Alerts the user that the ``<`` operator not defined for dual numbers.
+        Redefines the ``<`` operator for dual numbers.
+        Alerts the user that the ``<`` operator not defined for dual numbers if their real part is not nul.
 
         Returns: 
             Bool: Comparasion based on the real parts of the dual numbers.
         """
         if isinstance(x, Dual):
-            logging.warning("< comparision not defined for dual numbers: return type corresponds to the comparision between the real part of the numbers.")
-            return self.real < x.real
+            if (x.dual==0 and self.dual==0):
+                return self.real<x.real
+            else:
+                logging.warning("< comparision not defined for dual numbers with non nul dual parts. Return type corresponds to the comparision between the real part of the numbers.")
+                return self.real < x.real
         else: 
-            logging.warning("< comparision not defined for dual numbers: return type corresponds to the comparision between the real part of the dual number and the scalar.") 
-            return self.real < x
+            if (self.dual==0):
+                return self.real<x.real
+            else:
+                logging.warning("< comparision not defined for dual numbers with non nul dual parts. Return type corresponds to the comparision between the real part of the dual number and the scalar.") 
+                return self.real < x
 
     def __le__(self,x):
         """
-        Alerts the user that the ``<=`` operator not defined for dual numbers.
+        Redefines the ``<=`` operator for dual numbers.
+        Alerts the user that the ``<=`` operator not defined for dual numbers if their real part is not nul.
 
         Returns: 
             Bool: Comparasion based on the real parts of the dual numbers.
         """
         if isinstance(x, Dual):
-            logging.warning("<= comparision not defined for dual numbers: return type corresponds to the comparision between the real part of the numbers.")
-            return self.real <= x.real
+            if (x.dual==0 and self.dual==0):
+                return self.real<=x.real
+            else:
+                logging.warning("<= comparision not defined for dual numbers with non nul dual parts. Return type corresponds to the comparision between the real part of the numbers.")
+                return self.real <= x.real
         else: 
-            logging.warning("<= comparision not defined for dual numbers: return type corresponds to the comparision between the real part of the dual number and the scalar.") 
-            return self.real <= x
+            if (self.dual==0):
+                return self.real<=x.real
+            else:
+                logging.warning("<= comparision not defined for dual numbers with non nul dual parts. Return type corresponds to the comparision between the real part of the dual number and the scalar.") 
+                return self.real <= x
         
     def __abs__(self):
         """
