@@ -9,4 +9,4 @@ sphinxcontrib-svg2pdfconverter
 sphinx-gallery
 matplotlib
 pytest
-pandoc
+numpy>=1.23

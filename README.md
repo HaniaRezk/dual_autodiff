@@ -8,16 +8,20 @@ A Python package that performs automatic differentiation using dual numbers.
     * Basic arithmetic operations for dual numbers
     * Other essential functions for automatic differentiation (sin,cos,exp,..)
 
-* A comprehensive test suite that cover a meaningful range of cases. You can execute these tests with pytest by running the command:
+* A comprehensive test suite that cover a meaningful range of cases. After having installed the package, you can execute these tests with pytest by running the command:
 
 ```bash
 pytest -s tests/*
 ```
+If `pytest` is not installed in your environment, you can install it with:
+```bash
+pip install pytest
 
+```
 ## Installation
 
 Ensure you have Python 3.9 or higher. 
-You can install the package and its dependencies from source with:
+You can install the package and its dependencies from the source with:
 
 ```
 pip install -e .
@@ -45,10 +49,13 @@ print(x*y)
 
 ## Documentation
 
-A Sphinx documentation was used to generate the documentation for this package. You can generate the html documentation page by running the following command from the docs folder.
+A Sphinx documentation was used to generate the documentation for this package. After having installed the package, you can generate the html documentation page by running the following command from the docs folder.
 
 ```bash
-make htm 
+make install
+make clean
+make html
 ```
+
 The documentation can be viewed by opening docs/build/html/index.html in a web browser.
 

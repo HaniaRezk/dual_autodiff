@@ -4,6 +4,7 @@
 \usepackage{amsmath}
 \usepackage{amssymb}
 \usepackage{enumitem}
+\usepackage{xcolor}
 
 \title{\Huge \textbf{C1 Research Computing Coursework Report}} 
 \author{Hania Rezk (hhmmer2) \\ 
@@ -204,19 +205,32 @@ For \texttt{abs(x)}, \texttt{floor(x)}, and \texttt{ceil(x)}, we just apply thes
 \section{Test Suite}
 To ensure the reliability of our \texttt{Dual} class, a comprehensive test suite was developed. 
 The \texttt{autodiff\_tools.py} file in the \texttt{tests} folder executes 31 tests on our class, with each test corresponding to a specific function in the dual.py file. We tested a variety of dual numbers with both integer and float values for their real and dual parts. For functions that raise errors, invalid inputs were also tested to ensure the correct errors were produced.
-To run the tests with pytest, run the following command in your terminal from the project repository:
+To run the tests with pytest, after having installed the package, type the following command in your terminal from the project repository:
 
 \begin{verbatim}
 pytest -s tests/*
 \end{verbatim}
+\\
+
+\textbf{Note}: If pytest is not installed in your environment, install it by running the following command:
+\begin{verbatim}
+pip install pytest
+\end{verbatim}
+\\
+
 \section{Differentiating a function}
 \section{Documentation}
 Since the first file created in my package, I made sure to document my code using docstrings. Each function includes a docstring that describes its purpose, parameters and returns values, which was very helpful when generating the Sphinx documentation. The structure mirrors the \texttt{Read the Docs} page of the C1 course, as I used a theme provided by Read the Docs ('sphinx\_rtd\_theme'), and copied the structure of the docs folder in the GitHub repository of the research computing course created by Dr. Boris Bolliet. 
-To generate the html pages of the documentation, please run the following command in your terminal from docs folder (present in the project repository):
+To generate the html pages of the documentation, after having installed the package,  please run the following command in your terminal from docs folder:
 \begin{verbatim}
+make clean
 make html
 \end{verbatim}
 The documentation can be viewed by opening docs/build/html/index.html in a web browser.
+\\
+
+\textbf{Note}: The \texttt{make install} command installs all the required packages in your environment to correctly generate the documentation.
+\\
 \section{Questions 8-9}
 \section{Summary}
 \section{Declaration of AI Tools}
@@ -227,6 +241,23 @@ ChatGPT was the only AI tool used in the creation of this project. It was primar
 \[
 x = \text{Dual}(5, 3), \quad y = \text{Dual}(2, 4), \quad x + y = \text{Dual}(7, 7)
 \]
+\section{\textcolor{red}{Important Notes:}}
+
+\begin{itemize}
+    \item Please make sure you are using Python 3.9 or a newer version when importing and using the \texttt{dual\_autodiff} package.
+    
+    \item If you are creating a virtual environment to download the package, please ensure that Python 3.9 or newer is used to create the virtual environment. Also, make sure to upgrade \texttt{pip} by running the following command inside your environment:
+    \begin{verbatim}
+    python3.9 -m pip install --upgrade pip
+    \end{verbatim}
+    (Older versions of \texttt{pip} cannot install your package in editable mode without a \texttt{setup.py} file.)
+    
+    \item If you are in the directory that directly contains the main project repository (where the \texttt{dual\_autodiff} package is located), use the following command in Python to import the package:
+    \begin{verbatim}
+    from dual_autodiff.dual import dual
+    \end{verbatim}
+    in Python to import the package instead of \texttt{import dual\_autodiff as df}. This is because the system treats \texttt{dual\_autodiff} as a folder rather than a package in this directory.
+\end{itemize}
 
 \section{References}
 \begin{enumerate}
