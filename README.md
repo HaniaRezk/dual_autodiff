@@ -1,4 +1,4 @@
-# Auto_diff package 
+# Dual_autodiff Package 
 
 A Python package that performs automatic differentiation using dual numbers.
 
