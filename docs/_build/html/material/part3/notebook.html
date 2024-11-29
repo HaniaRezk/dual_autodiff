@@ -1,0 +1,500 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>3. Test suite &mdash; Automatic differentiation using dual numbers package beta documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/sg_gallery.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="4. Differentiating a function" href="../part4/notebook.html" />
+    <link rel="prev" title="2. Dual Numbers Class" href="../part2/notebook.html" />
+    <link href="../../_static/style.css" rel="stylesheet" type="text/css">
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> Automatic differentiation using dual numbers package
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption" role="heading"><span class="caption-text">Sections</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../part1/notebook.html">1. Package structure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../part2/notebook.html">2. Dual Numbers Class</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">3. Test suite</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#details">3.1. Details</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-tests.autodiff_tools">3.2. Tests</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../part4/notebook.html">4. Differentiating a function</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Automatic differentiation using dual numbers package</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li><span class="section-number">3. </span>Test suite</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="../../_sources/material/part3/notebook.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<div class="section" id="test-suite">
+<h1><span class="section-number">3. </span>Test suite<a class="headerlink" href="#test-suite" title="Permalink to this heading">¶</a></h1>
+<p>This section provides an overview of the <cite>test suite</cite> implemented for the Dual class.</p>
+<p>For each function in the Dual class, a test was implemented to make sure it performs as expected.</p>
+<div class="section" id="details">
+<h2><span class="section-number">3.1. </span>Details<a class="headerlink" href="#details" title="Permalink to this heading">¶</a></h2>
+<p>For functions that redefine operators (eg. , <cite>+</cite>, <cite>-</cite>, <cite>*</cite>, <cite>/</cite> , <cite>==</cite>, <cite>!=</cite>) two tests were performed:</p>
+<p>1- A first test for the operations between two dual numbers</p>
+<p>2- A second test for these operations between a dual number and a scalar</p>
+<p>For the functions that can raise warnings, tests were also performed using illegal inputs to make sure the function returns a NAN.</p>
+</div>
+<div class="section" id="module-tests.autodiff_tools">
+<span id="tests"></span><h2><span class="section-number">3.2. </span>Tests<a class="headerlink" href="#module-tests.autodiff_tools" title="Permalink to this heading">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="tests.autodiff_tools.test_add">
+<span class="sig-prename descclassname"><span class="pre">tests.autodiff_tools.</span></span><span class="sig-name descname"><span class="pre">test_add</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#tests.autodiff_tools.test_add" title="Permalink to this definition">¶</a></dt>
+<dd><p>A test that makes sure that the operator <code class="docutils literal notranslate"><span class="pre">+</span></code> correctly adds dual numbers.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tests.autodiff_tools.test_add_scalar">
+<span class="sig-prename descclassname"><span class="pre">tests.autodiff_tools.</span></span><span class="sig-name descname"><span class="pre">test_add_scalar</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#tests.autodiff_tools.test_add_scalar" title="Permalink to this definition">¶</a></dt>
+<dd><p>A test that makes sure that the operator <code class="docutils literal notranslate"><span class="pre">+</span></code> correctly adds a dual number and a scalar.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tests.autodiff_tools.test_cos">
+<span class="sig-prename descclassname"><span class="pre">tests.autodiff_tools.</span></span><span class="sig-name descname"><span class="pre">test_cos</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#tests.autodiff_tools.test_cos" title="Permalink to this definition">¶</a></dt>
+<dd><p>A test that makes sure that the cos() function behaves accordingly.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tests.autodiff_tools.test_div">
+<span class="sig-prename descclassname"><span class="pre">tests.autodiff_tools.</span></span><span class="sig-name descname"><span class="pre">test_div</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#tests.autodiff_tools.test_div" title="Permalink to this definition">¶</a></dt>
+<dd><p>A test that makes sure that the operator <code class="docutils literal notranslate"><span class="pre">/</span></code> correctly divides a dual number by another dual number and handles invalid input cases.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tests.autodiff_tools.test_div_scalar">
+<span class="sig-prename descclassname"><span class="pre">tests.autodiff_tools.</span></span><span class="sig-name descname"><span class="pre">test_div_scalar</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#tests.autodiff_tools.test_div_scalar" title="Permalink to this definition">¶</a></dt>
+<dd><p>A test that makes sure that the operator <code class="docutils literal notranslate"><span class="pre">/</span></code> correctly divides a dual number by a scalar and handles invalid input cases.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tests.autodiff_tools.test_eq">
+<span class="sig-prename descclassname"><span class="pre">tests.autodiff_tools.</span></span><span class="sig-name descname"><span class="pre">test_eq</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#tests.autodiff_tools.test_eq" title="Permalink to this definition">¶</a></dt>
+<dd><p>A test that makes sure that the operator <code class="docutils literal notranslate"><span class="pre">==</span></code> correctly identifies when two dual numbers are equal.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tests.autodiff_tools.test_eq_scalar">
+<span class="sig-prename descclassname"><span class="pre">tests.autodiff_tools.</span></span><span class="sig-name descname"><span class="pre">test_eq_scalar</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#tests.autodiff_tools.test_eq_scalar" title="Permalink to this definition">¶</a></dt>
+<dd><p>A test that makes sure that the operator <code class="docutils literal notranslate"><span class="pre">==</span></code> correctly identifies when a scalar is be equal to a dual number.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tests.autodiff_tools.test_exp">
+<span class="sig-prename descclassname"><span class="pre">tests.autodiff_tools.</span></span><span class="sig-name descname"><span class="pre">test_exp</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#tests.autodiff_tools.test_exp" title="Permalink to this definition">¶</a></dt>
+<dd><p>A test that makes sure that the exp() function behaves accordingly.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tests.autodiff_tools.test_ge">
+<span class="sig-prename descclassname"><span class="pre">tests.autodiff_tools.</span></span><span class="sig-name descname"><span class="pre">test_ge</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#tests.autodiff_tools.test_ge" title="Permalink to this definition">¶</a></dt>
+<dd><p>A test that makes sure that the operator <code class="docutils literal notranslate"><span class="pre">&gt;=</span></code> behaves according to its redefinition.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tests.autodiff_tools.test_gt">
+<span class="sig-prename descclassname"><span class="pre">tests.autodiff_tools.</span></span><span class="sig-name descname"><span class="pre">test_gt</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#tests.autodiff_tools.test_gt" title="Permalink to this definition">¶</a></dt>
+<dd><p>A test that makes sure that the operator <code class="docutils literal notranslate"><span class="pre">&gt;</span></code> behaves according to its redefinition.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tests.autodiff_tools.test_iadd">
+<span class="sig-prename descclassname"><span class="pre">tests.autodiff_tools.</span></span><span class="sig-name descname"><span class="pre">test_iadd</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#tests.autodiff_tools.test_iadd" title="Permalink to this definition">¶</a></dt>
+<dd><p>A test that makes sure that the operator <code class="docutils literal notranslate"><span class="pre">+=</span></code> correctly adds a dual number to another dual number.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tests.autodiff_tools.test_iadd_scalar">
+<span class="sig-prename descclassname"><span class="pre">tests.autodiff_tools.</span></span><span class="sig-name descname"><span class="pre">test_iadd_scalar</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#tests.autodiff_tools.test_iadd_scalar" title="Permalink to this definition">¶</a></dt>
+<dd><p>A test that makes sure that the operator <code class="docutils literal notranslate"><span class="pre">+=</span></code> correctly adds a scalar to a dual number.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tests.autodiff_tools.test_idiv">
+<span class="sig-prename descclassname"><span class="pre">tests.autodiff_tools.</span></span><span class="sig-name descname"><span class="pre">test_idiv</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#tests.autodiff_tools.test_idiv" title="Permalink to this definition">¶</a></dt>
+<dd><p>A test that makes sure that the operator <code class="docutils literal notranslate"><span class="pre">/=</span></code> correctly divides a dual number by another dual number and handles invalid input cases.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tests.autodiff_tools.test_idiv_scalar">
+<span class="sig-prename descclassname"><span class="pre">tests.autodiff_tools.</span></span><span class="sig-name descname"><span class="pre">test_idiv_scalar</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#tests.autodiff_tools.test_idiv_scalar" title="Permalink to this definition">¶</a></dt>
+<dd><p>A test that makes sure that the operator <code class="docutils literal notranslate"><span class="pre">/=</span></code> correctly divides a dual number by a scalar and handles invalid input cases.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tests.autodiff_tools.test_imultiply">
+<span class="sig-prename descclassname"><span class="pre">tests.autodiff_tools.</span></span><span class="sig-name descname"><span class="pre">test_imultiply</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#tests.autodiff_tools.test_imultiply" title="Permalink to this definition">¶</a></dt>
+<dd><p>A test that makes sure that the operator <code class="docutils literal notranslate"><span class="pre">*=</span></code> correctly multiplies two dual numbers.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tests.autodiff_tools.test_imultiply_scalar">
+<span class="sig-prename descclassname"><span class="pre">tests.autodiff_tools.</span></span><span class="sig-name descname"><span class="pre">test_imultiply_scalar</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#tests.autodiff_tools.test_imultiply_scalar" title="Permalink to this definition">¶</a></dt>
+<dd><p>A test that makes sure that the operator <code class="docutils literal notranslate"><span class="pre">*=</span></code> correctly multiplies a dual number and a scalar.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tests.autodiff_tools.test_init">
+<span class="sig-prename descclassname"><span class="pre">tests.autodiff_tools.</span></span><span class="sig-name descname"><span class="pre">test_init</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#tests.autodiff_tools.test_init" title="Permalink to this definition">¶</a></dt>
+<dd><p>A test that makes sure that our Dual class initializes correctly.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tests.autodiff_tools.test_inverse">
+<span class="sig-prename descclassname"><span class="pre">tests.autodiff_tools.</span></span><span class="sig-name descname"><span class="pre">test_inverse</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#tests.autodiff_tools.test_inverse" title="Permalink to this definition">¶</a></dt>
+<dd><p>A test that makes sure that the inverse() function behaves accordingly and handles invalid input cases.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tests.autodiff_tools.test_ipower">
+<span class="sig-prename descclassname"><span class="pre">tests.autodiff_tools.</span></span><span class="sig-name descname"><span class="pre">test_ipower</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#tests.autodiff_tools.test_ipower" title="Permalink to this definition">¶</a></dt>
+<dd><p>A test that makes sure that the operator <code class="docutils literal notranslate"><span class="pre">**=</span></code> behaves accordingly when the power is a scalar.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tests.autodiff_tools.test_ipower_scalar">
+<span class="sig-prename descclassname"><span class="pre">tests.autodiff_tools.</span></span><span class="sig-name descname"><span class="pre">test_ipower_scalar</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#tests.autodiff_tools.test_ipower_scalar" title="Permalink to this definition">¶</a></dt>
+<dd><p>A test that makes sure that the operator <code class="docutils literal notranslate"><span class="pre">**=</span></code> behaves accordingly when the power is a dual number with no dual part.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tests.autodiff_tools.test_isubtract">
+<span class="sig-prename descclassname"><span class="pre">tests.autodiff_tools.</span></span><span class="sig-name descname"><span class="pre">test_isubtract</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#tests.autodiff_tools.test_isubtract" title="Permalink to this definition">¶</a></dt>
+<dd><p>A test that makes sure that the operator <code class="docutils literal notranslate"><span class="pre">-=</span></code> correctly subtracts a dual number from another dual number.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tests.autodiff_tools.test_isubtract_scalar">
+<span class="sig-prename descclassname"><span class="pre">tests.autodiff_tools.</span></span><span class="sig-name descname"><span class="pre">test_isubtract_scalar</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#tests.autodiff_tools.test_isubtract_scalar" title="Permalink to this definition">¶</a></dt>
+<dd><p>A test that makes sure that the operator <code class="docutils literal notranslate"><span class="pre">-=</span></code> correctly subtracts a scalar from a dual number.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tests.autodiff_tools.test_le">
+<span class="sig-prename descclassname"><span class="pre">tests.autodiff_tools.</span></span><span class="sig-name descname"><span class="pre">test_le</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#tests.autodiff_tools.test_le" title="Permalink to this definition">¶</a></dt>
+<dd><p>A test that makes sure that the operator <code class="docutils literal notranslate"><span class="pre">&lt;=</span></code> behaves according to its redefinition.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tests.autodiff_tools.test_log">
+<span class="sig-prename descclassname"><span class="pre">tests.autodiff_tools.</span></span><span class="sig-name descname"><span class="pre">test_log</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#tests.autodiff_tools.test_log" title="Permalink to this definition">¶</a></dt>
+<dd><p>A test that makes sure that the log() function behaves accordingly and handles invalid input cases.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tests.autodiff_tools.test_lt">
+<span class="sig-prename descclassname"><span class="pre">tests.autodiff_tools.</span></span><span class="sig-name descname"><span class="pre">test_lt</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#tests.autodiff_tools.test_lt" title="Permalink to this definition">¶</a></dt>
+<dd><p>A test that makes sure that the operator <code class="docutils literal notranslate"><span class="pre">&lt;</span></code> behaves according to its redefinition.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tests.autodiff_tools.test_multiply">
+<span class="sig-prename descclassname"><span class="pre">tests.autodiff_tools.</span></span><span class="sig-name descname"><span class="pre">test_multiply</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#tests.autodiff_tools.test_multiply" title="Permalink to this definition">¶</a></dt>
+<dd><p>A test that makes sure that the operator <code class="docutils literal notranslate"><span class="pre">*</span></code> correctly multiplies two dual numbers.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tests.autodiff_tools.test_multiply_scalar">
+<span class="sig-prename descclassname"><span class="pre">tests.autodiff_tools.</span></span><span class="sig-name descname"><span class="pre">test_multiply_scalar</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#tests.autodiff_tools.test_multiply_scalar" title="Permalink to this definition">¶</a></dt>
+<dd><p>A test that makes sure that the operator <code class="docutils literal notranslate"><span class="pre">*</span></code> correctly multiplies a dual number and a scalar.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tests.autodiff_tools.test_ne">
+<span class="sig-prename descclassname"><span class="pre">tests.autodiff_tools.</span></span><span class="sig-name descname"><span class="pre">test_ne</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#tests.autodiff_tools.test_ne" title="Permalink to this definition">¶</a></dt>
+<dd><p>A test that makes sure that the operator <code class="docutils literal notranslate"><span class="pre">==</span></code> correctly differentiates between two different dual numbers.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tests.autodiff_tools.test_ne_scalar">
+<span class="sig-prename descclassname"><span class="pre">tests.autodiff_tools.</span></span><span class="sig-name descname"><span class="pre">test_ne_scalar</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#tests.autodiff_tools.test_ne_scalar" title="Permalink to this definition">¶</a></dt>
+<dd><p>A test that makes sure that the operator <code class="docutils literal notranslate"><span class="pre">==</span></code> correctly differentiates between a dual number and a scalar.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tests.autodiff_tools.test_power">
+<span class="sig-prename descclassname"><span class="pre">tests.autodiff_tools.</span></span><span class="sig-name descname"><span class="pre">test_power</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#tests.autodiff_tools.test_power" title="Permalink to this definition">¶</a></dt>
+<dd><p>A test that makes sure that the operator <code class="docutils literal notranslate"><span class="pre">**</span></code> behaves accordingly and handles invalid input cases.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tests.autodiff_tools.test_power_scalar">
+<span class="sig-prename descclassname"><span class="pre">tests.autodiff_tools.</span></span><span class="sig-name descname"><span class="pre">test_power_scalar</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#tests.autodiff_tools.test_power_scalar" title="Permalink to this definition">¶</a></dt>
+<dd><p>A test that makes sure that the operator <code class="docutils literal notranslate"><span class="pre">**</span></code> behaves accordingly when the power is a dual number with no dual part.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tests.autodiff_tools.test_print">
+<span class="sig-prename descclassname"><span class="pre">tests.autodiff_tools.</span></span><span class="sig-name descname"><span class="pre">test_print</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">capsys</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#tests.autodiff_tools.test_print" title="Permalink to this definition">¶</a></dt>
+<dd><p>A test that makes sure that print(Dual(_,_)) outputs “Dual(real=_, dual=_).”.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tests.autodiff_tools.test_radd_scalar">
+<span class="sig-prename descclassname"><span class="pre">tests.autodiff_tools.</span></span><span class="sig-name descname"><span class="pre">test_radd_scalar</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#tests.autodiff_tools.test_radd_scalar" title="Permalink to this definition">¶</a></dt>
+<dd><p>A test that makes sure that the reverse operator <code class="docutils literal notranslate"><span class="pre">+</span></code> correctly adds a scalar to a dual number.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tests.autodiff_tools.test_rdiv_scalar">
+<span class="sig-prename descclassname"><span class="pre">tests.autodiff_tools.</span></span><span class="sig-name descname"><span class="pre">test_rdiv_scalar</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#tests.autodiff_tools.test_rdiv_scalar" title="Permalink to this definition">¶</a></dt>
+<dd><p>A test that makes sure that the reverse operator <code class="docutils literal notranslate"><span class="pre">/</span></code> correctly divides a scalar by a dual number.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tests.autodiff_tools.test_rmul_scalar">
+<span class="sig-prename descclassname"><span class="pre">tests.autodiff_tools.</span></span><span class="sig-name descname"><span class="pre">test_rmul_scalar</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#tests.autodiff_tools.test_rmul_scalar" title="Permalink to this definition">¶</a></dt>
+<dd><p>A test that makes sure that the reverse operator <code class="docutils literal notranslate"><span class="pre">*</span></code> correctly multiplies a dual number and a scalar.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tests.autodiff_tools.test_rsub_scalar">
+<span class="sig-prename descclassname"><span class="pre">tests.autodiff_tools.</span></span><span class="sig-name descname"><span class="pre">test_rsub_scalar</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#tests.autodiff_tools.test_rsub_scalar" title="Permalink to this definition">¶</a></dt>
+<dd><p>A test that makes sure that the reverse operator <code class="docutils literal notranslate"><span class="pre">-</span></code> correctly subtracts a dual number from a scalar.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tests.autodiff_tools.test_sin">
+<span class="sig-prename descclassname"><span class="pre">tests.autodiff_tools.</span></span><span class="sig-name descname"><span class="pre">test_sin</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#tests.autodiff_tools.test_sin" title="Permalink to this definition">¶</a></dt>
+<dd><p>A test that makes sure that the sin() function behaves accordingly.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tests.autodiff_tools.test_subtract">
+<span class="sig-prename descclassname"><span class="pre">tests.autodiff_tools.</span></span><span class="sig-name descname"><span class="pre">test_subtract</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#tests.autodiff_tools.test_subtract" title="Permalink to this definition">¶</a></dt>
+<dd><p>A test that makes sure that the operator <code class="docutils literal notranslate"><span class="pre">-</span></code> correctly subtracts dual numbers.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tests.autodiff_tools.test_subtract_scalar">
+<span class="sig-prename descclassname"><span class="pre">tests.autodiff_tools.</span></span><span class="sig-name descname"><span class="pre">test_subtract_scalar</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#tests.autodiff_tools.test_subtract_scalar" title="Permalink to this definition">¶</a></dt>
+<dd><p>A test that makes sure that the operator <code class="docutils literal notranslate"><span class="pre">-</span></code> correctly subtracts a scalar from a dual number.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tests.autodiff_tools.test_tan">
+<span class="sig-prename descclassname"><span class="pre">tests.autodiff_tools.</span></span><span class="sig-name descname"><span class="pre">test_tan</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#tests.autodiff_tools.test_tan" title="Permalink to this definition">¶</a></dt>
+<dd><p>A test that makes sure that the tan() function behaves accordingly and handles invalid input cases.</p>
+</dd></dl>
+
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="../part4/notebook.html" class="btn btn-neutral float-right" title="4. Differentiating a function" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="../part2/notebook.html" class="btn btn-neutral float-left" title="2. Dual Numbers Class" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright .
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
