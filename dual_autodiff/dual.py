@@ -20,6 +20,9 @@ class Dual:
         real: real part of the number.
         dual: dual part of the number.
         """
+        if (not isinstance(real,(int,float)) or not isinstance(dual,(int,float))):
+             logging.warning("Real and Dual parts have to be numbers.")
+             return None
         self.real=real
         self.dual=dual
 
