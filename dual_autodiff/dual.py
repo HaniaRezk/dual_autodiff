@@ -150,6 +150,9 @@ class Dual:
             self.dual=dual
             return self
         else:
+            if (x==0):
+                logging.warning("Division of dual numbers is not defined when the the denominator is zero")
+                return np.nan
             self.real/=x
             self.dual/=x
             return self
@@ -334,6 +337,9 @@ class Dual:
             dual= (self.dual * x.real - self.real * x.dual) // (x.real ** 2)
             return Dual(real,dual)
         else:
+            if (x==0):
+                logging.warning("Division of dual numbers is not defined when the the denominator is zero")
+                return np.nan
             real=self.real//x
             dual=self.dual//x
             return Dual(real,dual)
@@ -379,6 +385,9 @@ class Dual:
             self.dual=dual
             return self
         else:
+            if (x==0):
+                logging.warning("Division of dual numbers is not defined when the the denominator is zero")
+                return np.nan
             self.real//=x
             self.dual//=x
             return self
@@ -403,12 +412,13 @@ class Dual:
             real= self.real % x.real
             dual= (self.dual * x.real - self.real * x.dual) % (x.real ** 2)
             return Dual(real,dual)
-        elif isinstance(x, (int, float)):
+        else:
+            if (x==0):
+                logging.warning("Modulus by zero is not defined")
+                return np.nan
             real=self.real%x
             dual=self.dual%x
             return Dual(real,dual)
-        else:
-            raise TypeError("Unsupported type for modulus operation")
 
     def __imod__(self,x):
         """
@@ -425,7 +435,7 @@ class Dual:
         """
         if isinstance(x, Dual):
             if (x.real == 0):
-                logging.warning("Floor division of dual numbers is not defined when the real part of the denominator is zero")
+                logging.warning("Modulus by zero is not defined")
                 return np.nan
             real= self.real % x.real
             dual= (self.dual * x.real - self.real * x.dual) % (x.real ** 2)
@@ -433,6 +443,9 @@ class Dual:
             self.dual=dual
             return self
         else:
+            if (x==0):
+                logging.warning("Modulus by zero is not defined")
+                return np.nan
             self.real%=x
             self.dual%=x
             return self

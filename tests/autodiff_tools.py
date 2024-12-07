@@ -247,6 +247,134 @@ def test_rdiv_scalar():
     assert y.dual==(-24/49)
     assert np.isnan(z)
 
+def test_floordiv():
+    """
+    A test that makes sure that the operator ``//`` correctly divides a dual number by another dual number and handles invalid input cases.
+
+    """
+    x=Dual(0,9)
+    y=Dual(4,3)
+    x1=Dual(2,3)
+    z=y//x
+    z1=y//x1
+    assert np.isnan(z)
+    assert z1.real==2
+    assert z1.dual==-2
+
+def test_floordiv_scalar():
+    """
+    A test that makes sure that the operator ``//`` correctly divides a dual number by a scalar and handles invalid input cases.
+
+    """
+    x=Dual(2,3)
+    z=x//2
+    y=x//0
+    assert z.real==1
+    assert z.dual==1
+    assert np.isnan(y)
+
+def test_ifloordiv():
+    """
+    A test that makes sure that the operator ``//=`` correctly divides a dual number by another dual number and handles invalid input cases.
+
+    """
+    y=Dual(4,3)
+    z=Dual(4,3)
+    x=Dual(0,9)
+    x1=Dual(2,3)
+    y//=x
+    z//=x1
+    assert np.isnan(y)
+    assert z.real==2
+    assert z.dual==-2
+
+def test_ifloordiv_scalar():
+    """
+    A test that makes sure that the operator ``//=`` correctly divides a dual number by a scalar and handles invalid input cases.
+
+    """
+    x=Dual(2,3)
+    x//=2
+    assert x.real==1
+    assert x.dual==1
+
+def test_rfloordiv_scalar():
+    """
+    A test that makes sure that the reverse operator ``//`` correctly divides a scalar by a dual number.
+
+    """
+    x=Dual(7,12)
+    x1=Dual(0,10)
+    y=2//x
+    z=2//x1
+    assert y.real==(2//7)
+    assert y.dual==(-24//49)
+    assert np.isnan(z)
+
+def test_mod():
+    """
+    A test that makes sure that the operator ``%`` correctly calculates the modulus of a dual number with another dual number and handles invalid input cases.
+
+    """
+    x=Dual(0,9)
+    y=Dual(4,3)
+    x1=Dual(2,3)
+    z=y%x
+    z1=y%x1
+    assert np.isnan(z)
+    assert z1.real==0
+    assert z1.dual==2
+
+def test_mod_scalar():
+    """
+    A test that makes sure that the operator ``%`` correctly calculates the modulus of a dual number by a scalar and handles invalid input cases.
+
+    """
+    x=Dual(2,3)
+    z=x%2
+    y=x%0
+    assert z.real==0
+    assert z.dual==1
+    assert np.isnan(y)
+
+def test_imod():
+    """
+    A test that makes sure that the operator ``%=`` correctly calculates the modulus of a dual number with another dual number and handles invalid input cases.
+
+    """
+    y=Dual(4,3)
+    z=Dual(4,3)
+    x=Dual(0,9)
+    x1=Dual(2,3)
+    y%=x
+    z%=x1
+    assert np.isnan(y)
+    assert z.real==0
+    assert z.dual==2
+
+def test_imod_scalar():
+    """
+    A test that makes sure that the operator ``%=`` correctly calculates the modulus of a dual number with a scalar, and handles invalid input cases.
+
+    """
+    x=Dual(2,3)
+    x%=2
+    assert x.real==0
+    assert x.dual==1
+
+def test_rmod_scalar():
+    """
+    A test that makes sure that the reverse operator ``%`` correctly calculates the modulus of a scalar with a dual number.
+
+    """
+    x=Dual(7,12)
+    x1=Dual(0,10)
+    y=2%x
+    z=2%x1
+    assert y.real==(2%7)
+    assert y.dual==(-24%49)
+    assert np.isnan(z)
+
 def test_eq():
     """
     A test that makes sure that the operator ``==`` correctly identifies when two dual numbers are equal.
