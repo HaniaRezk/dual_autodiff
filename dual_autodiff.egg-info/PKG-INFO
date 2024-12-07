@@ -1,3 +1,13 @@
+Metadata-Version: 2.1
+Name: dual_autodiff
+Version: 0.0.0
+Summary: A python package that performs automatic differentiation using dual numbers
+Author-email: Hania Rezk <hhmmer2@cam.ac.uk>
+Keywords: dual numbers,automatic differentiation
+Requires-Python: >=3.9
+Description-Content-Type: text/markdown
+Requires-Dist: numpy
+
 # Dual_autodiff Package 
 
 A Python package that performs automatic differentiation using dual numbers.
@@ -19,11 +29,6 @@ pip install pytest
 
 ```
 ## Installation
-Ensure you have the latest version of pip 24.3.1 installed in your environment.
-You can upgrade pip by running the command:
-```
-pip install --upgrade pip
-```
 
 Ensure you have Python 3.9 or higher. 
 You can install the package and its dependencies from the source with:
@@ -57,6 +62,7 @@ print(x*y)
 A Sphinx documentation was used to generate the documentation for this package. After having installed the package, you can generate the html documentation page by running the following command from the docs folder.
 
 ```bash
+make install
 make clean
 make html
 ```

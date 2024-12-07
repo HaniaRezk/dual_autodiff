@@ -11,19 +11,21 @@ Automatic differentiation using dual numbers package
 
 | *Author*: `Hania Rezk <https://github.com/HaniaRezk>`_
 
-.. note::
-   C1 Reasearch Computing Coursework, Michaelmas Term 2024 at the University of Cambridge. 
+This is the documentation page for the dual_autodiff package. 
 
-Goal
+Overview
 ----------------------------------------
 
-This project aims to create a package that performs automatic differentiation using dual numbers.
+Dual numbers, represented as x = a+bε, are numbers that consist of a real part a, and a dual part b carried by ε that satisfies ε2 = 0.
+
+They can be used to compute derivatives efficiently; this approach, called forward-mode automatic differentiation, is particularly valuable in fields like machine learning as it enables fast training of deep neural networks.
+
+This project aims to create a package that performs automatic differentiation using these dual numbers.
 
 Getting Started
 ----------------------------------------
 
-To install the package:
-   pip install path/to/dual_autodiff.whl
+To install the package refer to the README file at the root of the project repository
 
 
 .. toctree::
@@ -35,10 +37,12 @@ To install the package:
    material/part2/notebook
    material/part3/notebook
    material/part4/notebook
+   
+
+.. note::
+   C1 Reasearch Computing Coursework, Michaelmas Term 2024 at the University of Cambridge. 
 
 Useful Resources 
 ----------------------------------------
 
 - `Wikipedia page for dual numbers <https://en.wikipedia.org/wiki/Dual_number>`_
-
-
