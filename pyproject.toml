@@ -10,7 +10,7 @@ requires-python=">=3.9"
 authors=[{name="Hania Rezk", email="hhmmer2@cam.ac.uk"}]
 keywords=["dual numbers", "automatic differentiation"]
 dependencies=["numpy"]
-#dynamic = ["version"]
+dynamic = ["version"]
 
 [tools.setuptools_scm]
 version_scheme = "post-release"
