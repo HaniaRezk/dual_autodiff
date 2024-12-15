@@ -191,11 +191,11 @@ def test_div():
     x=Dual(0,9)
     y=Dual(4,3)
     x1=Dual(2,3)
-    z=y/x
     z1=y/x1
-    assert np.isnan(z)
     assert z1.real==2
     assert z1.dual==-1.5
+    with pytest.raises(ZeroDivisionError):
+        z=y/x
 
 def test_div_scalar():
     """
@@ -204,10 +204,10 @@ def test_div_scalar():
     """
     x=Dual(2,3)
     z=x/2
-    y=x/0
     assert z.real==1
     assert z.dual==1.5
-    assert np.isnan(y)
+    with pytest.raises(ZeroDivisionError):
+        y = x / 0 
 
 def test_idiv():
     """
@@ -218,9 +218,9 @@ def test_idiv():
     z=Dual(4,3)
     x=Dual(0,9)
     x1=Dual(2,3)
-    y/=x
     z/=x1
-    assert np.isnan(y)
+    with pytest.raises(ZeroDivisionError):
+       y/=x
     assert z.real==2
     assert z.dual==-1.5
 
@@ -242,10 +242,10 @@ def test_rdiv_scalar():
     x=Dual(7,12)
     x1=Dual(0,10)
     y=2/x
-    z=2/x1
     assert y.real==(2/7)
     assert y.dual==(-24/49)
-    assert np.isnan(z)
+    with pytest.raises(ZeroDivisionError):
+       z=2/x1
 
 def test_floordiv():
     """
@@ -255,11 +255,11 @@ def test_floordiv():
     x=Dual(0,9)
     y=Dual(4,3)
     x1=Dual(2,3)
-    z=y//x
     z1=y//x1
-    assert np.isnan(z)
     assert z1.real==2
     assert z1.dual==-2
+    with pytest.raises(ZeroDivisionError):
+       z=y//x
 
 def test_floordiv_scalar():
     """
@@ -268,10 +268,10 @@ def test_floordiv_scalar():
     """
     x=Dual(2,3)
     z=x//2
-    y=x//0
     assert z.real==1
     assert z.dual==1
-    assert np.isnan(y)
+    with pytest.raises(ZeroDivisionError):
+       y=x//0
 
 def test_ifloordiv():
     """
@@ -282,11 +282,11 @@ def test_ifloordiv():
     z=Dual(4,3)
     x=Dual(0,9)
     x1=Dual(2,3)
-    y//=x
     z//=x1
-    assert np.isnan(y)
     assert z.real==2
     assert z.dual==-2
+    with pytest.raises(ZeroDivisionError):
+        y//=x
 
 def test_ifloordiv_scalar():
     """
@@ -306,10 +306,10 @@ def test_rfloordiv_scalar():
     x=Dual(7,12)
     x1=Dual(0,10)
     y=2//x
-    z=2//x1
     assert y.real==(2//7)
     assert y.dual==(-24//49)
-    assert np.isnan(z)
+    with pytest.raises(ZeroDivisionError):
+        z=2//x1
 
 def test_mod():
     """
@@ -319,11 +319,11 @@ def test_mod():
     x=Dual(0,9)
     y=Dual(4,3)
     x1=Dual(2,3)
-    z=y%x
     z1=y%x1
-    assert np.isnan(z)
     assert z1.real==0
     assert z1.dual==2
+    with pytest.raises(ZeroDivisionError):
+        z=y%x
 
 def test_mod_scalar():
     """
@@ -332,10 +332,10 @@ def test_mod_scalar():
     """
     x=Dual(2,3)
     z=x%2
-    y=x%0
     assert z.real==0
     assert z.dual==1
-    assert np.isnan(y)
+    with pytest.raises(ZeroDivisionError):
+        y=x%0
 
 def test_imod():
     """
@@ -346,11 +346,11 @@ def test_imod():
     z=Dual(4,3)
     x=Dual(0,9)
     x1=Dual(2,3)
-    y%=x
     z%=x1
-    assert np.isnan(y)
     assert z.real==0
     assert z.dual==2
+    with pytest.raises(ZeroDivisionError):
+        y%=x
 
 def test_imod_scalar():
     """
@@ -370,10 +370,10 @@ def test_rmod_scalar():
     x=Dual(7,12)
     x1=Dual(0,10)
     y=2%x
-    z=2%x1
     assert y.real==(2%7)
     assert y.dual==(-24%49)
-    assert np.isnan(z)
+    with pytest.raises(ZeroDivisionError):
+        z=2%x1
 
 def test_eq():
     """
@@ -471,11 +471,20 @@ def test_power():
     """
     x=Dual(6,8)
     y=Dual(7,8)
+    x1=Dual(0,5)
+    x3=Dual(-1,0)
     z=x**3
-    z1=x**y
+    z4=x**0
     assert z.real==216
     assert z.dual==864
-    assert np.isnan(z1)
+    assert z4==1
+    with pytest.raises(ZeroDivisionError):
+        z3=x1**x3
+    with pytest.raises(ZeroDivisionError):
+        x2=x1**-1
+    with pytest.raises(TypeError):
+        z1=x**y
+    
 
 def test_power_scalar():
     """
@@ -485,8 +494,12 @@ def test_power_scalar():
     x=Dual(6,8)
     y=Dual(3,0)
     z=x**y
+    x1=Dual(-1,0)
+    x2=Dual(0,5)
     assert z.real==216
     assert z.dual==864
+    with pytest.raises(ZeroDivisionError):
+        x3=x2**x1
 
 def test_ipower():
     """
@@ -496,11 +509,17 @@ def test_ipower():
     x=Dual(6,8)
     y=Dual(6,8)
     z=Dual(6,8)
+    x1=Dual(0,1)
     x**=3
-    z**=y
+    z1=Dual(9,8)
+    z1**=0
     assert x.real==216
     assert x.dual==864
-    assert np.isnan(z)
+    assert z1==1
+    with pytest.raises(TypeError):
+        z**=y
+    with pytest.raises(ZeroDivisionError):
+        x1**=-1
 
 def test_ipower_scalar():
     """
@@ -513,18 +532,28 @@ def test_ipower_scalar():
     assert x.real==216
     assert x.dual==864
 
+def test_rpower():
+    """
+    A test that makes sure that the reverse operator ``**`` correctly returns a non number
+
+    """
+    x=Dual(9,0)
+    with pytest.raises(TypeError):
+        z=5**x
+
+
 def test_inverse():
     """
     A test that makes sure that the inverse() function behaves accordingly and handles invalid input cases.
 
     """
     x=Dual(0,1)
-    z=x.inverse()
     x1=Dual(1,5)
     z1=x1.inverse()
     assert z1.real==1
     assert z1.dual==-5
-    assert np.isnan(z)
+    with pytest.raises(ZeroDivisionError):
+        z=x.inverse()
 
 def test_sin():
     """
@@ -564,10 +593,10 @@ def test_log():
     x=Dual(np.e, 1)
     y=x.log()
     x1=Dual(0, 1)
-    y1=x1.log()
     assert np.isclose(y.real, np.log(np.e))
     assert np.isclose(y.dual, 1 / np.e)
-    assert np.isnan(y1)
+    with pytest.raises(ZeroDivisionError):
+        y1=x1.log()
 
 def test_tan():
     """
@@ -577,7 +606,7 @@ def test_tan():
     x=Dual(np.pi / 4, 1)
     y=x.tan()
     x1=Dual(np.pi / 2, 1)
-    y1=x1.tan()
     assert np.isclose(y.real, np.tan(np.pi / 4))
     assert np.isclose(y.dual, 1 / (np.cos(np.pi / 4) ** 2))
-    assert np.isnan(y1) 
+    with pytest.raises(ZeroDivisionError):
+        y1=x1.tan()

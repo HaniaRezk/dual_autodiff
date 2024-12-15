@@ -2,6 +2,7 @@
 import numpy as np
 import logging
 
+
 logging.basicConfig(level=logging.INFO, format='%(levelname)s: %(message)s')
 
 class Dual:
@@ -22,7 +23,7 @@ class Dual:
         """
         if (not isinstance(real,(int,float)) or not isinstance(dual,(int,float))):
              logging.warning("Real and Dual parts have to be numbers.")
-             return None
+             raise TypeError
         self.real=real
         self.dual=dual
 
@@ -98,15 +99,14 @@ class Dual:
         """
         if isinstance(x, Dual):
             if (x.real==0):
-                logging.warning("Division of dual numbers is not defined when the real part of the denominator is zero")
-                return np.nan
+                logging.warning("Division is not defined when the real part of the dual number (denominator) is zero")
+                raise ZeroDivisionError
             real=self.real/x.real
             dual=(self.dual*x.real-self.real*x.dual)/(x.real**2)
             return Dual(real,dual)
         else:
             if (x==0):
-                logging.warning("Division of dual numbers is not defined when the the denominator is zero")
-                return np.nan
+                raise ZeroDivisionError
             real=self.real/x
             dual=self.dual/x
             return Dual(real,dual)
@@ -124,7 +124,7 @@ class Dual:
         """
         if (self.real==0):
             logging.warning("Division is not defined when the real part of the dual number (denominator) is zero")
-            return np.nan
+            raise ZeroDivisionError
         real = x / self.real
         dual = -(self.dual*x)/(self.real**2)
         return Dual(real,dual)
@@ -146,7 +146,7 @@ class Dual:
         if isinstance(x, Dual):
             if (x.real == 0):
                 logging.warning("Division of dual numbers is not defined when the real part of the denominator is zero")
-                return np.nan
+                raise ZeroDivisionError
             real = self.real / x.real
             dual = (self.dual*x.real-self.real*x.dual)/(x.real**2)
             self.real=real
@@ -154,8 +154,7 @@ class Dual:
             return self
         else:
             if (x==0):
-                logging.warning("Division of dual numbers is not defined when the the denominator is zero")
-                return np.nan
+                raise ZeroDivisionError
             self.real/=x
             self.dual/=x
             return self
@@ -277,13 +276,23 @@ class Dual:
         if isinstance(power, Dual):
             if(power.dual!=0):
                 logging.warning("The power cant be a dual number")
-                return np.nan
+                raise TypeError
             else:
+                if self.real==0 and power.real==-1 :
+                    logging.warning("Power of -1 not defined when real part of fual number is zero")
+                    raise ZeroDivisionError
+                if power.real==0:
+                    return 1
                 real=self.real**power.real
                 dual=(power.real*self.real**(power.real-1))*self.dual
                 return Dual(real,dual)
 
-        else:        
+        else:  
+            if self.real==0 and power==-1 :
+                    logging.warning("Power of -1 not defined when real part of dual number is zero")
+                    raise ZeroDivisionError 
+            if power==0:
+                    return 1
             real=self.real**power
             dual=(power*self.real**(power-1))*self.dual
             return Dual(real,dual)
@@ -303,21 +312,42 @@ class Dual:
         """
         if isinstance(power, Dual):
             if (power.dual!=0):
-                logging.warning("The power cant be a dual number")
-                return np.nan
+                logging.warning("The power cannot be a dual number")
+                raise TypeError
             else:
+                if self.real==0 and power.real==-1 :
+                    logging.warning("Power of -1 not defined when real part of dual number is zero")
+                    raise ZeroDivisionError
+                if power.real==0:
+                    return 1
                 real=self.real**power.real
                 dual=(power.real*self.real**(power.real-1))*self.dual
                 self.real=real
                 self.dual=dual
                 return self
 
-        else:        
+        else:
+            if self.real==0 and power==-1 :
+                    logging.warning("Power of -1 not defined when real part of dual number is zero")
+                    raise ZeroDivisionError  
+            if power==0:
+                    return 1       
             real=self.real**power
             dual=(power*self.real**(power-1))*self.dual
             self.real=real
             self.dual=dual
             return self
+
+    def __rpow__(self,x):
+        """
+        Redefines the reverse ``**`` operator to adapt it to dual numbers.
+
+        Returns:
+            Nan : the result is not defined when the power is a dual number
+        """
+        logging.warning("The power cannot be a dual number")
+        raise TypeError
+
 
     def __floordiv__(self,x):
         """
@@ -335,14 +365,13 @@ class Dual:
         if isinstance(x, Dual):
             if (x.real == 0):
                 logging.warning("Floor division of dual numbers is not defined when the real part of the denominator is zero")
-                return np.nan
+                raise ZeroDivisionError
             real= self.real // x.real
             dual= (self.dual * x.real - self.real * x.dual) // (x.real ** 2)
             return Dual(real,dual)
         else:
             if (x==0):
-                logging.warning("Division of dual numbers is not defined when the the denominator is zero")
-                return np.nan
+                raise ZeroDivisionError
             real=self.real//x
             dual=self.dual//x
             return Dual(real,dual)
@@ -360,7 +389,7 @@ class Dual:
         """
         if (self.real==0):
             logging.warning("Division is not defined when the real part of the dual number (denominator) is zero")
-            return np.nan
+            raise ZeroDivisionError
         real = x // self.real
         dual = -(self.dual*x)//(self.real**2)
         return Dual(real,dual)
@@ -381,7 +410,7 @@ class Dual:
         if isinstance(x, Dual):
             if (x.real == 0):
                 logging.warning("Division is not defined when the real part of the dual number (denominator) is zero")
-                return np.nan
+                raise ZeroDivisionError
             real= self.real // x.real
             dual= (self.dual * x.real - self.real * x.dual) // (x.real ** 2)
             self.real=real
@@ -389,8 +418,7 @@ class Dual:
             return self
         else:
             if (x==0):
-                logging.warning("Division of dual numbers is not defined when the the denominator is zero")
-                return np.nan
+                raise ZeroDivisionError
             self.real//=x
             self.dual//=x
             return self
@@ -411,14 +439,13 @@ class Dual:
         if isinstance(x, Dual):
             if (x.real == 0):
                 logging.warning("Floor division of dual numbers is not defined when the real part of the denominator is zero")
-                return np.nan
+                raise ZeroDivisionError
             real= self.real % x.real
             dual= (self.dual * x.real - self.real * x.dual) % (x.real ** 2)
             return Dual(real,dual)
         else:
             if (x==0):
-                logging.warning("Modulus by zero is not defined")
-                return np.nan
+                raise ZeroDivisionError
             real=self.real%x
             dual=self.dual%x
             return Dual(real,dual)
@@ -439,7 +466,7 @@ class Dual:
         if isinstance(x, Dual):
             if (x.real == 0):
                 logging.warning("Modulus by zero is not defined")
-                return np.nan
+                raise ZeroDivisionError
             real= self.real % x.real
             dual= (self.dual * x.real - self.real * x.dual) % (x.real ** 2)
             self.real=real
@@ -447,8 +474,7 @@ class Dual:
             return self
         else:
             if (x==0):
-                logging.warning("Modulus by zero is not defined")
-                return np.nan
+                raise ZeroDivisionError
             self.real%=x
             self.dual%=x
             return self
@@ -469,7 +495,7 @@ class Dual:
         """
         if (self.real==0):
             logging.warning("Modulus by zero is not defined")
-            return np.nan
+            raise ZeroDivisionError
         real = x % self.real
         dual = -(self.dual*x)%(self.real**2)
         return Dual(real,dual)
@@ -646,7 +672,7 @@ class Dual:
         """  
         if (np.isclose(np.cos(self.real), 0)):
             logging.warning("Tan can't be defined for this function")
-            return np.nan
+            raise ZeroDivisionError
         dual=self.dual/(np.cos(self.real)**2)
         return  Dual(np.tan(self.real),dual)
 
@@ -664,7 +690,7 @@ class Dual:
         """ 
         if (self.real==0):
             logging.warning("Logarithm of dual number not defined when real part is zero")
-            return np.nan
+            raise ZeroDivisionError
         dual=(1/self.real)*self.dual
         return  Dual(np.log(self.real),dual)
 
@@ -731,7 +757,7 @@ class Dual:
         """  
         if (self.real==0):
             logging.warning("Can't invert this Dual number")
-            return np.nan
+            raise ZeroDivisionError
         real=1/self.real
         dual=-self.dual/(self.real**2)
 
