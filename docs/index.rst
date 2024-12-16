@@ -16,7 +16,7 @@ This is the documentation page for the dual_autodiff package.
 Overview
 ----------------------------------------
 
-Dual numbers, represented as x = a+bε, are numbers that consist of a real part a, and a dual part b carried by ε that satisfies ε2 = 0.
+Dual numbers, represented as x = a+bε, are numbers that consist of a real part a, and a dual part b carried by ε that satisfies ε^2 = 0.
 
 They can be used to compute derivatives efficiently; this approach, called forward-mode automatic differentiation, is particularly valuable in fields like machine learning as it enables fast training of deep neural networks.
 
@@ -36,7 +36,8 @@ To install the package refer to the README file at the root of the project repos
    material/part1/notebook
    material/part2/notebook
    material/part3/notebook
-   material/part4/notebook
+   question5
+   dual_autodiff
    
 
 .. note::

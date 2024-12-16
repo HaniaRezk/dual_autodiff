@@ -1,20 +1,25 @@
 # tests/autodiff_tools.py
+
+#Importing the libraries
 import pytest
 from dual_autodiff.dual import Dual
 import numpy as np
 
 def test_init():
     """
-    A test that makes sure that our Dual class initializes correctly.
+    A test that makes sure that the Dual class initialises correctly, and handles invalid inputs
 
     """
     x=Dual(1.5,1.0)
     assert x.real==1.5
     assert x.dual==1.0
+    #Make sure that initialisation of a dual number with non number real and dual parts raises a TypeError.
+    with pytest.raises(TypeError):
+       y=Dual("Real",0)
 
 def test_print(capsys):
     """
-    A test that makes sure that print(Dual(_,_)) outputs "Dual(real=_, dual=_).".
+    A test that makes sure that print(Dual(_,_)) outputs "Dual(real=_, dual=_)."
 
     """
     x=Dual(1.5,1.0)
@@ -24,8 +29,7 @@ def test_print(capsys):
 
 def test_add():
     """
-    A test that makes sure that the operator ``+`` correctly adds dual numbers.
-
+    A test that makes sure that the operator ``+`` correctly adds two dual numbers.
     """
     x=Dual(2,1)
     y=Dual(3,2)
@@ -36,7 +40,6 @@ def test_add():
 def test_add_scalar():
     """
     A test that makes sure that the operator ``+`` correctly adds a dual number and a scalar.
-
     """
     x=Dual(2,1)
     z=x+5
@@ -45,7 +48,7 @@ def test_add_scalar():
 
 def test_iadd():
     """
-    A test that makes sure that the operator ``+=`` correctly adds a dual number to another dual number.
+    A test that makes sure that the operator ``+=`` correctly adds two dual numbers.
 
     """
     x=Dual(2,1)
@@ -194,6 +197,7 @@ def test_div():
     z1=y/x1
     assert z1.real==2
     assert z1.dual==-1.5
+    #Make sure that division by a dual number with zero real part raises a ZeroDivisionError
     with pytest.raises(ZeroDivisionError):
         z=y/x
 
@@ -206,6 +210,7 @@ def test_div_scalar():
     z=x/2
     assert z.real==1
     assert z.dual==1.5
+    #Make sure that division of a dual number by zero raises a ZeroDivisionError
     with pytest.raises(ZeroDivisionError):
         y = x / 0 
 
@@ -219,14 +224,15 @@ def test_idiv():
     x=Dual(0,9)
     x1=Dual(2,3)
     z/=x1
-    with pytest.raises(ZeroDivisionError):
-       y/=x
     assert z.real==2
     assert z.dual==-1.5
+    #Make sure that division by a dual number with zero real part raises a ZeroDivisionError
+    with pytest.raises(ZeroDivisionError):
+       y/=x
 
 def test_idiv_scalar():
     """
-    A test that makes sure that the operator ``/=`` correctly divides a dual number by a scalar and handles invalid input cases.
+    A test that makes sure that the operator ``/=`` correctly divides a dual number by a scalar.
 
     """
     x=Dual(2,3)
@@ -236,7 +242,7 @@ def test_idiv_scalar():
 
 def test_rdiv_scalar():
     """
-    A test that makes sure that the reverse operator ``/`` correctly divides a scalar by a dual number.
+    A test that makes sure that the reverse operator ``/`` correctly divides a scalar by a dual number and handles invalid input cases.
 
     """
     x=Dual(7,12)
@@ -244,6 +250,7 @@ def test_rdiv_scalar():
     y=2/x
     assert y.real==(2/7)
     assert y.dual==(-24/49)
+    #Make sure that division by a dual number with zero real part raises a ZeroDivisionError
     with pytest.raises(ZeroDivisionError):
        z=2/x1
 
@@ -258,6 +265,7 @@ def test_floordiv():
     z1=y//x1
     assert z1.real==2
     assert z1.dual==-2
+    #Make sure that division by a dual number with zero real part raises a ZeroDivisionError
     with pytest.raises(ZeroDivisionError):
        z=y//x
 
@@ -270,6 +278,7 @@ def test_floordiv_scalar():
     z=x//2
     assert z.real==1
     assert z.dual==1
+    #Make sure that division of a dual number by zero raises a ZeroDivisionError
     with pytest.raises(ZeroDivisionError):
        y=x//0
 
@@ -285,12 +294,13 @@ def test_ifloordiv():
     z//=x1
     assert z.real==2
     assert z.dual==-2
+    #Make sure that the division by a dual number with zero real part raises a ZeroDivisionError
     with pytest.raises(ZeroDivisionError):
         y//=x
 
 def test_ifloordiv_scalar():
     """
-    A test that makes sure that the operator ``//=`` correctly divides a dual number by a scalar and handles invalid input cases.
+    A test that makes sure that the operator ``//=`` correctly divides a dual number by a scalar.
 
     """
     x=Dual(2,3)
@@ -308,6 +318,7 @@ def test_rfloordiv_scalar():
     y=2//x
     assert y.real==(2//7)
     assert y.dual==(-24//49)
+    #Make sure that division of a scalar by a dual number with zero real part raises a ZeroDivisionError
     with pytest.raises(ZeroDivisionError):
         z=2//x1
 
@@ -322,6 +333,7 @@ def test_mod():
     z1=y%x1
     assert z1.real==0
     assert z1.dual==2
+    #Make sure that the modulus by a dual number with zero real part raises a ZeroDivisionError
     with pytest.raises(ZeroDivisionError):
         z=y%x
 
@@ -334,6 +346,7 @@ def test_mod_scalar():
     z=x%2
     assert z.real==0
     assert z.dual==1
+    #Make sure that the modulus by zero raises a ZeroDivisionError
     with pytest.raises(ZeroDivisionError):
         y=x%0
 
@@ -349,12 +362,13 @@ def test_imod():
     z%=x1
     assert z.real==0
     assert z.dual==2
+    #Make sure that the modulus by a dual number with zero real part raises a ZeroDivisionError
     with pytest.raises(ZeroDivisionError):
         y%=x
 
 def test_imod_scalar():
     """
-    A test that makes sure that the operator ``%=`` correctly calculates the modulus of a dual number with a scalar, and handles invalid input cases.
+    A test that makes sure that the operator ``%=`` correctly calculates the modulus of a dual number with a scalar.
 
     """
     x=Dual(2,3)
@@ -364,7 +378,7 @@ def test_imod_scalar():
 
 def test_rmod_scalar():
     """
-    A test that makes sure that the reverse operator ``%`` correctly calculates the modulus of a scalar with a dual number.
+    A test that makes sure that the reverse operator ``%`` correctly calculates the modulus of a scalar with a dual number, and handles invalid input cases.
 
     """
     x=Dual(7,12)
@@ -372,6 +386,7 @@ def test_rmod_scalar():
     y=2%x
     assert y.real==(2%7)
     assert y.dual==(-24%49)
+    #Make sure that the modulus of a scalar by a dual number with zero real part raises a ZeroDivisionError
     with pytest.raises(ZeroDivisionError):
         z=2%x1
 
@@ -388,7 +403,7 @@ def test_eq():
 
 def test_eq_scalar():
     """
-    A test that makes sure that the operator ``==`` correctly identifies when a scalar is be equal to a dual number.
+    A test that makes sure that the operator ``==`` correctly identifies when a scalar is equal to a dual number.
 
     """
     y=4
@@ -466,7 +481,7 @@ def test_le():
 
 def test_power():
     """
-    A test that makes sure that the operator ``**`` behaves accordingly and handles invalid input cases.
+    A test that makes sure that the operator ``**`` behaves accordingly and handles invalid cases.
 
     """
     x=Dual(6,8)
@@ -478,17 +493,20 @@ def test_power():
     assert z.real==216
     assert z.dual==864
     assert z4==1
+    #Make sure that a dual number with a real part=0 raised to the power of -1 raises a ZeroDivisionError.
     with pytest.raises(ZeroDivisionError):
         z3=x1**x3
+    #Make sure that a dual number raised to the power of -1 raises a ZeroDivisionError
     with pytest.raises(ZeroDivisionError):
         x2=x1**-1
+    #Make sure that a dual number raised to the power of another dual number raises a TypeError
     with pytest.raises(TypeError):
         z1=x**y
     
 
 def test_power_scalar():
     """
-    A test that makes sure that the operator ``**`` behaves accordingly when the power is a dual number with no dual part.
+    A test that makes sure that the operator ``**`` behaves accordingly and handles invalid cases.
 
     """
     x=Dual(6,8)
@@ -498,12 +516,13 @@ def test_power_scalar():
     x2=Dual(0,5)
     assert z.real==216
     assert z.dual==864
+    #Make sure that a dual number with a real part=0 raised to the power of another dual number with a real part =-1 raises a ZeroDivisionError.
     with pytest.raises(ZeroDivisionError):
         x3=x2**x1
 
 def test_ipower():
     """
-    A test that makes sure that the operator ``**=`` behaves accordingly when the power is a scalar.
+    A test that makes sure that the operator ``**=`` behaves accordingly when the power is a scalar, and handles invalid cases
 
     """
     x=Dual(6,8)
@@ -516,8 +535,10 @@ def test_ipower():
     assert x.real==216
     assert x.dual==864
     assert z1==1
+    #Make sure that a dual number raised to the power of another dual number raises a TypeError
     with pytest.raises(TypeError):
         z**=y
+     #Make sure that a dual number with a real part=0 raised to the power of -1 raises a ZeroDivisionError.
     with pytest.raises(ZeroDivisionError):
         x1**=-1
 
@@ -538,6 +559,7 @@ def test_rpower():
 
     """
     x=Dual(9,0)
+    #Make sure that a dual number raised to the power of another dual number raises a TypeError
     with pytest.raises(TypeError):
         z=5**x
 
@@ -552,6 +574,7 @@ def test_inverse():
     z1=x1.inverse()
     assert z1.real==1
     assert z1.dual==-5
+    #Make sure that the inverse of a dual number with zero real part raises a ZeroDivisionError
     with pytest.raises(ZeroDivisionError):
         z=x.inverse()
 
@@ -595,6 +618,7 @@ def test_log():
     x1=Dual(0, 1)
     assert np.isclose(y.real, np.log(np.e))
     assert np.isclose(y.dual, 1 / np.e)
+    #Make sure that the inverse of a dual number with zero real part raises a ZeroDivisionError
     with pytest.raises(ZeroDivisionError):
         y1=x1.log()
 
@@ -608,5 +632,6 @@ def test_tan():
     x1=Dual(np.pi / 2, 1)
     assert np.isclose(y.real, np.tan(np.pi / 4))
     assert np.isclose(y.dual, 1 / (np.cos(np.pi / 4) ** 2))
+    #Make sure that the inverse of a dual number with real part = pi/2 raises a ZeroDivisionError
     with pytest.raises(ZeroDivisionError):
         y1=x1.tan()
