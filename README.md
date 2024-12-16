@@ -73,4 +73,4 @@ The notebook "dual_autodiff.ipynb" contains examples of how to use the dual_auto
 Make sure to run 'make install' from the docs folder (of the dual_autodiff package folder) in your kernel environment to install the necessary libraries for running this notebook. Make sure to also install the cynthonized package and the pure python package in your kernel environment.
 
 ## question5 notebook
-The notebook "question5.ipynb" contains that computes the derivative of a function f(x) using dual numbers, and compares it to the analytical and numerical derivatives.
+The notebook "question5.ipynb" computes the derivatives of a function f(x) using dual numbers, and compares it to the analytical and numerical derivatives.
