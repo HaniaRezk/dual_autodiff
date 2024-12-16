@@ -18,7 +18,8 @@ This section provides an overview of our package structure, to clarify the names
     │   ├── requirements.txt              
     │   ├── conf.py                  # Configuration of the documentation
     │   ├── index.rst                # The main page of the documentation
-    │   ├── material/                # Notbeooks for different parts of the documentation
+    │   ├── dual_autodiff            # Tutorial notebook
+    │   ├── material/                # Notebooks for different parts of the documentation
     └── tests/                       # Test folder
     │   ├── autodiff_tools.py        # Test suite for Dual class
     └── Question5.py                 # Code for question 5 of the coursework

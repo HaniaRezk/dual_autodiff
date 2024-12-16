@@ -1,13 +1,15 @@
 # dual_autodiff/dual.py
+
+#Importing dependencies
 import numpy as np
 import logging
 
-
+#Configure basic logging
 logging.basicConfig(level=logging.INFO, format='%(levelname)s: %(message)s')
 
 class Dual:
     """
-    A class that defines a structure for dual numbers and performs standards operations on them.
+    A class that defines a structure for dual numbers and performs standard operations on them.
 
     Attributes:
         real: real part of the number.
@@ -15,11 +17,15 @@ class Dual:
     """
     def __init__(self,real,dual):
         """
-        Initializes the dual number using its real and dual part.
+        Initializes the dual number using its real and dual parts.
 
         Parameters:
-        real: real part of the number.
-        dual: dual part of the number.
+            real: real part of the number.
+            dual: dual part of the number.
+
+        Raises:
+            Warning: logging warning is triggered when an invalid type is provided.
+            TypeError: if either `real` or `dual` is not a number.
         """
         if (not isinstance(real,(int,float)) or not isinstance(dual,(int,float))):
              logging.warning("Real and Dual parts have to be numbers.")
@@ -29,10 +35,10 @@ class Dual:
 
     def __str__(self):
         """
-        Redefines the readable string form of the class to get the desired output when we use print the dual number.
+        Redefines the readable string form of the class to get the desired output when we use print on the dual number.
 
         Returns:
-            String: in the form "Dual(real=number.real, dual=number.dual) "
+            String: in the form "Dual(real=number.real, dual=number.dual)".
         """
         string="Dual(real="+ str(self.real) +", dual="+ str(self.dual)+ ")."
         return string
@@ -42,24 +48,24 @@ class Dual:
         Redefines the ``+`` operator to adapt it to dual numbers.
 
         Parameters:
-            x: the dual number or scalar to add to our current instance.
+            x: the dual number or scalar to add to the current instance.
 
         Returns:
-            Dual number: the result of the addition of the current instance and the input (dual number or scalar)
+            Dual number: the result of the addition of the current instance and the parameter (dual number or scalar).
         """
+        #if x is a dual number
         if isinstance(x, Dual):
             return Dual(x.real+self.real,x.dual+self.dual)
+        #if x is a scalar
         else:
             return Dual(x + self.real,self.dual)
 
     def __radd__(self, x):
-
         """
-        Redefines the reverse ``+`` operator to adapt it to dual numbers.
-        Considers the case where we have :scalar+dual number
+        Redefines the reverse ``+`` operator to adapt it to dual numbers and consider the case of the following operation: scalar + dual number (not covered by __add__()).
 
         Parameters:
-            x: the scalar to add to our current instance.
+            x: the scalar to add to the current instance.
 
         Returns:
             Dual number: the result of the addition of the scalar and the current instance.
@@ -71,15 +77,17 @@ class Dual:
         Redefines the ``+=`` operator to adapt it to dual numbers.
 
         Parameters:
-            x: the dual number or scalar to add to our current instance.
+            x: the dual number or scalar to add to the current instance.
 
         Returns:
-            Dual number: the result of the addition of the current instance and the input (dual number or scalar)
+            Dual number: The modified current instance after performing the addition.
         """
+        #if x is a dual number
         if isinstance(x, Dual):
             self.real+=x.real
             self.dual+=x.dual
             return self
+        #if x is a scalar
         else: 
             self.real+=x
             return self
@@ -89,21 +97,25 @@ class Dual:
         Redefines the ``/`` operator to adapt it to dual numbers.
 
         Parameters:
-            x: the dual number or scalar to divide our current instance with.
+            x: the dual number or scalar to divide the current instance with.
 
         Returns:
             Dual number: the result of dividing the current instance by the input (dual number or scalar).
         
         Raises:
-            Warning: If division by zero is attempted.
+            Warning: logging warning is triggered when division by zero in the real part of a dual number is attempted.
+            ZeroDivisionError: If division by zero is attempted.
         """
+        #if x is a dual number
         if isinstance(x, Dual):
             if (x.real==0):
                 logging.warning("Division is not defined when the real part of the dual number (denominator) is zero")
                 raise ZeroDivisionError
+            #logic of division in the report
             real=self.real/x.real
             dual=(self.dual*x.real-self.real*x.dual)/(x.real**2)
             return Dual(real,dual)
+        #if x is a scalar
         else:
             if (x==0):
                 raise ZeroDivisionError
@@ -113,14 +125,17 @@ class Dual:
 
     def __rtruediv__(self, x):
         """
-        Redefines the reverse ``/`` operator to adapt it to dual numbers.
-        Considers the case where we have: scalar/dual number
+        Redefines the reverse ``/`` operator to adapt it to dual numbers and consider the case of the following operation : scalar / dual number (not covered by __truediv__())
 
         Parameters:
             x: the scalar that is the numerator of the division.
 
         Returns:
-            Dual number : the result of dividing the scalar by a dual number.
+            Dual number: the result of dividing the scalar by a dual number.
+        
+        Raises:
+            Warning: logging warning is triggered when division by zero in the real part of a dual number is attempted.
+            ZeroDivisionError: If division by zero is attempted.
         """
         if (self.real==0):
             logging.warning("Division is not defined when the real part of the dual number (denominator) is zero")
@@ -135,14 +150,16 @@ class Dual:
         Redefines the ``/=`` operator to adapt it to dual numbers.
 
         Parameters:
-            x: the dual number or scalar to divide our current instance with.
+            x: the dual number or scalar to divide the current instance with.
 
         Returns:
-            Dual number: the result of  dividing the current instance by the input (dual number or scalar).
+            Dual number: The modified current instance after performing the division.
         
         Raises:
-            Warning: If division by zero is attempted.
+            Warning: logging warning is triggered when division by zero in the real part of a dual number is attempted.
+            ZeroDivisionError: If division by zero is attempted.
         """
+        #if x is a dual number
         if isinstance(x, Dual):
             if (x.real == 0):
                 logging.warning("Division of dual numbers is not defined when the real part of the denominator is zero")
@@ -152,6 +169,7 @@ class Dual:
             self.real=real
             self.dual=dual
             return self
+        #if x is a scalar
         else:
             if (x==0):
                 raise ZeroDivisionError
@@ -165,26 +183,27 @@ class Dual:
         Redefines the ``-`` operator to adapt it to dual numbers.
 
         Parameters:
-            x: the dual number or scalar to subtract from our current instance.
+            x: the dual number or scalar to subtract from the current instance.
 
         Returns:
             Dual number: the result of the subtraction of the input (dual number or scalar) from the current instance.
         """
+        #if x is a dual number
         if isinstance(x, Dual):
             return Dual(self.real-x.real,self.dual-x.dual)
+        #if x is a scalar
         else:
             return Dual(self.real-x,self.dual)
 
     def __rsub__(self, x):
         """
-        Redefines the reverse ``-`` operator to adapt it to dual numbers.
-        Considers the case where we have :scalar-dual number
+        Redefines the reverse ``-`` operator to adapt it to dual numbers and consider the case of the following operation : scalar - dual number (not covered by __sub__())
 
         Parameters:
-            x: the scalar to add to our current instance.
+            x: the scalar from which the current instance will be subtracted.
 
         Returns:
-            Dual number : the result of the subtraction of the scalar and the current instance.
+            Dual number: the result of the subtraction of the current instance from the scalar.
         """
         return Dual(x-self.real,-self.dual)
     
@@ -193,15 +212,17 @@ class Dual:
         Redefines the ``-=`` operator to adapt it to dual numbers.
 
         Parameters:
-            x: the dual number or scalar to subtract from our current instance.
+            x: the dual number or scalar to subtract from the current instance.
 
         Returns:
-            Dual number: the result of the subtraction of the input (dual number or scalar) from the current instance.
+            Dual number: The modified current instance after performing the subtraction.
         """
+        #if x is a dual number
         if isinstance(x, Dual):
             self.real-=x.real
             self.dual-=x.dual
             return self
+        #if x is a scalar
         else: 
             self.real-=x
             return self
@@ -211,29 +232,30 @@ class Dual:
         Redefines the ``*`` operator to adapt it to dual numbers.
 
         Parameters:
-            x: the dual number or scalar to multiply our current instance with.
+            x: the dual number or scalar to multiply the current instance with.
 
         Returns:
             Dual number: the result of the multiplication between the input (dual number or scalar) and the current instance.
         """
+        #if x is a dual number
         if isinstance(x, Dual):
             real=self.real*x.real
             dual=self.real*x.dual+self.dual*x.real
             return Dual(real,dual)
+        #if x is a scalar
         else:
             return Dual(self.real*x,self.dual*x)
         
     def __rmul__(self, x):
 
         """
-        Redefines the reverse ``*`` operator to adapt it to dual numbers.
-        Considers the case where we have :scalar*dual number
+        Redefines the reverse ``*`` operator to adapt it to dual numbers and consider the case of the following operation : scalar * dual number (not covered by __mul__())
 
         Parameters:
-            x: the scalar to add to our current instance.
+            x: the scalar to multiply the current instance with.
 
         Returns:
-            Dual number : the result of the the multiplication between the scalar and the current instance.
+            Dual number: the result of the the multiplication between the scalar and the current instance.
         """
         return self * x
 
@@ -242,18 +264,20 @@ class Dual:
         Redefines the ``*=`` operator to adapt it to dual numbers.
 
         Parameters:
-            x: the dual number or scalar to multiply our current instance with.
+            x: the dual number or scalar to multiply the current instance with.
 
         Returns:
-            Dual number: the result of the multiplication between the input (dual number or scalar) and the current instance.
+            Dual number: The modified current instance after performing the multiplication.
 
         """
+        #if x is a dual number
         if isinstance(x, Dual):
             real=self.real*x.real
             dual=self.real*x.dual+self.dual*x.real
             self.real=real
             self.dual=dual
             return self
+        #if x is a scalar
         else:
             self.real*=x
             self.dual*=x
@@ -271,25 +295,29 @@ class Dual:
             Dual number: the current instance raised to the power of the input.
 
         Raises:
-            Warning: If the power is a dual number.
+            Warning: logging warning is triggered when the power is a dual number or if the power is -1 and the real part of the dual number is zero.
+            TypeError: if the power is a dual number.
+            ZeroDivisionError: If division by zero is attempted.
         """
         if isinstance(power, Dual):
+            #if power is a dual number with a non nul dual part 
             if(power.dual!=0):
                 logging.warning("The power cant be a dual number")
                 raise TypeError
+            #if power is a dual number with a nul dual part 
             else:
                 if self.real==0 and power.real==-1 :
-                    logging.warning("Power of -1 not defined when real part of fual number is zero")
+                    logging.warning("Power of -1 not defined when real part of dual number is zero")
                     raise ZeroDivisionError
                 if power.real==0:
                     return 1
                 real=self.real**power.real
                 dual=(power.real*self.real**(power.real-1))*self.dual
                 return Dual(real,dual)
-
+        #the power is a scalar
         else:  
             if self.real==0 and power==-1 :
-                    logging.warning("Power of -1 not defined when real part of dual number is zero")
+                    logging.warning("Power of -1 not defined when real part of dual number is 0")
                     raise ZeroDivisionError 
             if power==0:
                     return 1
@@ -308,15 +336,19 @@ class Dual:
             Dual number: the current instance raised to the power of the input.
 
         Raises:
-            Warning: If the power is a dual number.
+            Warning: logging warning is triggered when the power is a dual number or if the power is -1 and the real part of the dual number is zero.
+            TypeError: if the power is a dual number.
+            ZeroDivisionError: If division by zero is attempted.
         """
         if isinstance(power, Dual):
+            #if power is a dual number with a non nul dual part 
             if (power.dual!=0):
                 logging.warning("The power cannot be a dual number")
                 raise TypeError
+            #if power is a dual number with a nul dual part 
             else:
                 if self.real==0 and power.real==-1 :
-                    logging.warning("Power of -1 not defined when real part of dual number is zero")
+                    logging.warning("Power of -1 not defined when real part of dual number is 0")
                     raise ZeroDivisionError
                 if power.real==0:
                     return 1
@@ -325,10 +357,10 @@ class Dual:
                 self.real=real
                 self.dual=dual
                 return self
-
+        #the power is a scalar
         else:
             if self.real==0 and power==-1 :
-                    logging.warning("Power of -1 not defined when real part of dual number is zero")
+                    logging.warning("Power of -1 not defined when real part of dual number is 0")
                     raise ZeroDivisionError  
             if power==0:
                     return 1       
@@ -340,10 +372,11 @@ class Dual:
 
     def __rpow__(self,x):
         """
-        Redefines the reverse ``**`` operator to adapt it to dual numbers.
+        Redefines the reverse ``**`` operator to adapt it to dual numbers and consider the case of the following operation: scalar ** dual number.
 
-        Returns:
-            Nan : the result is not defined when the power is a dual number
+        Raises:
+            Warning: logging warning is triggered to alert the user that the power cannot be a dual number.
+            TypeError: if the power is a dual number.
         """
         logging.warning("The power cannot be a dual number")
         raise TypeError
@@ -354,14 +387,16 @@ class Dual:
         Redefines the ``//`` operator to adapt it to dual numbers.
 
         Parameters:
-            x: the dual number or scalar to divide our current instance with.
+            x: the dual number or scalar to divide the current instance with.
 
         Returns:
             Dual number: the result of the floor division between the current instance and the input (dual number or scalar).
         
         Raises:
-            Warning: If division by zero is attempted.
+            Warning: logging warning is triggered when division by zero in the real part of a dual number is attempted.
+            ZeroDivisionError: If division by zero is attempted.
         """
+        #if x is a dual number
         if isinstance(x, Dual):
             if (x.real == 0):
                 logging.warning("Floor division of dual numbers is not defined when the real part of the denominator is zero")
@@ -369,6 +404,7 @@ class Dual:
             real= self.real // x.real
             dual= (self.dual * x.real - self.real * x.dual) // (x.real ** 2)
             return Dual(real,dual)
+        #if x is a scalar
         else:
             if (x==0):
                 raise ZeroDivisionError
@@ -378,14 +414,17 @@ class Dual:
 
     def __rfloordiv__(self, x):
         """
-        Redefines the reverse ``//`` operator to adapt it to dual numbers.
-        Considers the case where we have: scalar//dual number
+        Redefines the reverse ``//`` operator to adapt it to dual numbers and consider the case of the following operation: scalar // dual number (not covered by __floordiv__)
 
         Parameters:
             x: the scalar that is the numerator of the division.
 
         Returns:
-            dual number : the result of the floor division between the scalar and a dual number.
+            Dual number : the result of the floor division of scalar by a dual number.
+
+        Raises:
+            Warning: logging warning is triggered when division by zero in the real part of a dual number is attempted.
+            ZeroDivisionError: If division by zero is attempted.
         """
         if (self.real==0):
             logging.warning("Division is not defined when the real part of the dual number (denominator) is zero")
@@ -399,14 +438,16 @@ class Dual:
         Redefines the ``//=`` operator to adapt it to dual numbers.
 
         Parameters:
-            x: the dual number or scalar to divide our current instance with.
+            x: the dual number or scalar to divide the current instance with.
 
         Returns:
-            Dual number: the result of the floor division between the current instance and the input (dual number or scalar).
+           Dual number: the modified current instance after performing the multiplication.
         
         Raises:
-            Warning: If division by zero is attempted.
+            Warning: logging warning is triggered when division by zero in the real part of a dual number is attempted.
+            ZeroDivisionError: If division by zero is attempted.
         """
+        #if x is a dual number
         if isinstance(x, Dual):
             if (x.real == 0):
                 logging.warning("Division is not defined when the real part of the dual number (denominator) is zero")
@@ -416,6 +457,7 @@ class Dual:
             self.real=real
             self.dual=dual
             return self
+        #if x is a scalar
         else:
             if (x==0):
                 raise ZeroDivisionError
@@ -434,15 +476,18 @@ class Dual:
             Dual number: the result of the modulus operation.
         
         Raises:
-            Warning: If modulus by zero is attempted.
+            Warning: logging warning is triggered when modulus by zero in the real part of a dual number is attempted.
+            ZeroDivisionError: If modulus by zero is attempted.
         """
+        #if x is a dual number
         if isinstance(x, Dual):
             if (x.real == 0):
-                logging.warning("Floor division of dual numbers is not defined when the real part of the denominator is zero")
+                logging.warning("Modulus by zero is not defined")
                 raise ZeroDivisionError
             real= self.real % x.real
             dual= (self.dual * x.real - self.real * x.dual) % (x.real ** 2)
             return Dual(real,dual)
+        #if x is a scalar
         else:
             if (x==0):
                 raise ZeroDivisionError
@@ -458,11 +503,13 @@ class Dual:
             x: the dual number or scalar to compute the modulus with.
 
         Returns:
-            Dual number: the result of the modulus operation.
+            Dual number: the modified current instance after performing the modulus operation.
         
         Raises:
-            Warning: If modulus by zero is attempted.
+            Warning: logging warning is triggered when modulus by zero in the real part of a dual number is attempted.
+            ZeroDivisionError: If modulus by zero is attempted.
         """
+        #If x is a dual number
         if isinstance(x, Dual):
             if (x.real == 0):
                 logging.warning("Modulus by zero is not defined")
@@ -472,6 +519,7 @@ class Dual:
             self.real=real
             self.dual=dual
             return self
+        #if x is a scalar
         else:
             if (x==0):
                 raise ZeroDivisionError
@@ -481,8 +529,7 @@ class Dual:
 
     def __rmod__(self,x):
         """
-        Redefines the reverse ``%`` operator to adapt it to dual numbers.
-        Considers the case where we have: scalar%dual number
+        Redefines the reverse ``%`` operator to adapt it to dual numbers and consider the case of the following operation: scalar % dual number (not covered by __mod__())
 
         Parameters:
             x: the scalar to compute the modulus with.
@@ -491,7 +538,8 @@ class Dual:
             Dual number: the result of the modulus operation.
         
         Raises:
-            Warning: If modulus by zero is attempted.
+            Warning: logging warning is triggered when modulus by zero in the real part of a dual number is attempted.
+            ZeroDivisionError: If modulus by zero is attempted.
         """
         if (self.real==0):
             logging.warning("Modulus by zero is not defined")
@@ -514,14 +562,16 @@ class Dual:
         Redefines the ``==`` operator to adapt it to dual numbers.
 
         Parameters:
-            x: the dual number or scalar we want to compare the current instance to.
+            x: the dual number or scalar to compare the current instance with.
 
         Returns:
             Bool:   True if the current instance and input are equal
                     False if the current instance and input are not equal
         """
+        #if x is a dual number
         if isinstance(x, Dual):
             return ((self.real==x.real) and (self.dual==x.dual))
+        #if x is a scalar
         else:
             return((self.real==x) and (self.dual==0))
 
@@ -530,34 +580,40 @@ class Dual:
         Redefines the ``!=`` operator to adapt it to dual numbers.
 
         Parameters:
-            x: the dual number or scalar we want to compare the current instance to.
+            x: the dual number or scalar to compare the current instance with.
 
         Returns:
             Bool:   True if the current instance and input are not equal
                     False if the current instance and input are equal
         """       
+        #if x is a dual number
         if isinstance(x, Dual):
             return ((self.real!=x.real) or (self.dual!=x.dual))
+        #if x is a scalar
         else:
             return((self.real!=x) or (self.dual!=0))
 
     def __gt__(self,x):
         """
         Redefines the ``>`` operator for dual numbers.
-        Alerts the user that the ``>`` operator not defined for dual numbers if their real part is not nul.
 
         Returns:
             Bool: Comparasion based on the real parts of the dual numbers.
+
+        Raises:
+            Warning: alerts the user that the ``>`` operator not defined for dual numbers if their dual parts are not nul.
         """
+        #if x is a dual number
         if isinstance(x, Dual):
             if (x.dual==0 and self.dual==0):
                 return self.real>x.real
             else:
                 logging.warning("> comparision not defined for dual numbers with non nul dual parts. Return type corresponds to the comparision between the real part of the numbers.")
                 return self.real > x.real
+        #if x is a scalar
         else:
             if (self.dual==0):
-                return self.real>x.real
+                return self.real>x
             else:
                 logging.warning("> comparision not defined for dual numbers with non nul dual parts. Return type corresponds to the comparision between the real part of the dual number and the scalar.") 
                 return self.real > x
@@ -565,20 +621,24 @@ class Dual:
     def __ge__(self,x):
         """
         Redefines the ``>=`` operator for dual numbers.
-        Alerts the user that the ``>=`` operator not defined for dual numbers if their real part is not nul.
 
         Returns:
             Bool: Comparasion based on the real parts of the dual numbers.
+
+        Raises:
+            Warning: alerts the user that the ``>=`` operator not defined for dual numbers if their dual parts are not nul.
         """
+        #if x is a dual number
         if isinstance(x, Dual):
             if (x.dual==0 and self.dual==0):
                 return self.real>=x.real
             else:
                 logging.warning(">= comparision not defined for dual numbers with non nul dual parts. Return type corresponds to the comparision between the real part of the numbers.")
                 return self.real >= x.real
+        #if x is a scalar
         else:
             if (self.dual==0):
-                return self.real>=x.real
+                return self.real>=x
             else:
                 logging.warning(">= comparision not defined for dual numbers with non nul dual parts. Return type corresponds to the comparision between the real part of the dual number and the scalar.") 
                 return self.real >= x
@@ -590,40 +650,49 @@ class Dual:
 
         Returns: 
             Bool: Comparasion based on the real parts of the dual numbers.
+
+        Raises:
+            Warning: alerts the user that the ``<`` operator not defined for dual numbers if their dual parts are not nul.
         """
+        #if x is a dual number
         if isinstance(x, Dual):
             if (x.dual==0 and self.dual==0):
                 return self.real<x.real
             else:
                 logging.warning("< comparision not defined for dual numbers with non nul dual parts. Return type corresponds to the comparision between the real part of the numbers.")
                 return self.real < x.real
+        #if x is a scalar
         else: 
             if (self.dual==0):
-                return self.real<x.real
+                return self.real<x
             else:
                 logging.warning("< comparision not defined for dual numbers with non nul dual parts. Return type corresponds to the comparision between the real part of the dual number and the scalar.") 
-                return self.real < x
+                return self.real<x
 
     def __le__(self,x):
         """
         Redefines the ``<=`` operator for dual numbers.
-        Alerts the user that the ``<=`` operator not defined for dual numbers if their real part is not nul.
 
         Returns: 
             Bool: Comparasion based on the real parts of the dual numbers.
+
+        Raises:
+            Warning: alerts the user that the ``<=`` operator not defined for dual numbers if their dual parts are not nul.
         """
+        #if x is a dual number
         if isinstance(x, Dual):
             if (x.dual==0 and self.dual==0):
                 return self.real<=x.real
             else:
                 logging.warning("<= comparision not defined for dual numbers with non nul dual parts. Return type corresponds to the comparision between the real part of the numbers.")
                 return self.real <= x.real
+        #if x is a scalar
         else: 
             if (self.dual==0):
-                return self.real<=x.real
+                return self.real<=x
             else:
                 logging.warning("<= comparision not defined for dual numbers with non nul dual parts. Return type corresponds to the comparision between the real part of the dual number and the scalar.") 
-                return self.real <= x
+                return self.real<=x
         
     def __abs__(self):
         """
@@ -668,7 +737,8 @@ class Dual:
                         The dual part of the result is the derivative of the tangent function evaluated at the real part of the current instance multiplied with the dual part of the current instance.
 
         Raises:
-            Warning: if the cosine of the real part is 0; division by 0 is an error.
+            Warning: logging warning is triggered when the cosine of the real part is zero.
+            ZeroDivisionError: Division by zero attempted
         """  
         if (np.isclose(np.cos(self.real), 0)):
             logging.warning("Tan can't be defined for this function")
@@ -686,7 +756,8 @@ class Dual:
                         The dual part of the result is the derivative of the log evaluated at the real part of the current instance multiplied with the dual part of the current instance.
 
         Raises:
-            Warning: if the real part of the instance is 0; division by 0 is an error.
+            Warning: logging warning is triggered when the real part of the dual number is zero.
+            ZeroDivisionError: Division by zero attempted
         """ 
         if (self.real==0):
             logging.warning("Logarithm of dual number not defined when real part is zero")
@@ -753,10 +824,11 @@ class Dual:
                         The real part of the result is the inverse of the real part of the current instance.
                         The dual part of the result is the derivative of the inverse evaluated at the real part of the current instance multiplied with the dual part of the current instance.
         Raises:
-            Warning: if the real part of the instance is 0; division by 0 is an error.
+            Warning: logging warning is triggered when the real part of the dual number is zero.
+            ZeroDivisionError: Division by zero attempted
         """  
         if (self.real==0):
-            logging.warning("Can't invert this Dual number")
+            logging.warning("Cannot invert this dual number because its real part is nul")
             raise ZeroDivisionError
         real=1/self.real
         dual=-self.dual/(self.real**2)

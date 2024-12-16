@@ -14,7 +14,7 @@ For functions that redefine operators (eg. , `+`, `-`, `*`, `/` , `==`, `!=`) tw
 
 2- A second test for these operations between a dual number and a scalar 
 
-For the functions that can raise warnings, tests were also performed using illegal inputs to make sure the function returns a NAN.
+For the functions that can raise warnings, tests were also performed using illegal inputs to make sure the functions raise the appropriate errors.
 
 Tests
 ----------------------------------------
